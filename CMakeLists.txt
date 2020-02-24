@@ -20,6 +20,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(scopy LANGUAGES CXX VERSION 1.1.2)
 
+message(${CMAKE_SYSTEM_PREFIX_PATH})
+
 set(Python_ADDITIONAL_VERSIONS 3)
 FIND_PACKAGE(PythonInterp REQUIRED)
 set(PYTHON_VERSION python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
@@ -110,9 +112,10 @@ find_package(Qt5Svg REQUIRED)
 find_package(Qt5UiTools REQUIRED)
 find_package(Qt5Xml REQUIRED)
 
-find_package(Gnuradio "3.8" REQUIRED COMPONENTS runtime analog blocks fft filter volk pmt scopy iio)
-#find_package(Gnuradio PATHS "c:/Program Files/gnuradio/lib/cmake/gnuradio" REQUIRED)
+set(CMAKE_VERBOSE_MAKEFILE TRUE)
+find_package(Gnuradio "3.8" REQUIRED COMPONENTS runtime analog blocks fft filter volk pmt )
 
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} /usr/local/lib/cmake)
 find_package(gnuradio-iio REQUIRED PATH_SUFFIXES iio)
 find_package(gnuradio-scopy REQUIRED PATH_SUFFIXES scopy)
 
@@ -269,7 +272,6 @@ add_executable(${PROJECT_NAME} WIN32 ${OSX_BUNDLE}
 if (WIN32 OR ENABLE_APPLICATION_BUNDLE)
 	set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME Scopy)
 endif()
-
 target_link_libraries(${PROJECT_NAME} LINK_PRIVATE
 		${BREAKPAD_LIBRARIES}
 		${BREAKPADCLIENT_LIBRARIES}
