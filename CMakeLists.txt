@@ -111,11 +111,10 @@ find_package(Qt5UiTools REQUIRED)
 find_package(Qt5Xml REQUIRED)
 
 find_package(Gnuradio "3.8" REQUIRED COMPONENTS runtime analog blocks fft filter volk pmt scopy iio)
-find_package(Gnuradio PATHS "c:/Program Files/gnuradio/lib/cmake/gnuradio" REQUIRED)
-#set(CMAKE_PREFIX_PATH /usr/local/lib/cmake/iio)
-find_package(gnuradio-iio PATH_SUFFIXES iio)
-#set(CMAKE_PREFIX_PATH /usr/local/lib/cmake/scopy)
-find_package(gnuradio-scopy PATH_SUFFIXES scopy)
+#find_package(Gnuradio PATHS "c:/Program Files/gnuradio/lib/cmake/gnuradio" REQUIRED)
+
+find_package(gnuradio-iio REQUIRED PATH_SUFFIXES iio)
+find_package(gnuradio-scopy REQUIRED PATH_SUFFIXES scopy)
 
 add_definitions(-DBOOST_ALL_DYN_LINK)
 find_package(Boost COMPONENTS system filesystem thread REQUIRED)
@@ -139,7 +138,7 @@ pkg_check_modules(SIGCPP REQUIRED sigc++-2.0)
 pkg_check_modules(LIBSIGROK REQUIRED libsigrok)
 pkg_check_modules(LIBSIGROKCXX REQUIRED libsigrokcxx)
 pkg_check_modules(LIBSIGROK_DECODE REQUIRED libsigrokdecode)
-message(CMAKE_PATH ${CMAKE_INCLUDE_PATH})
+message(CMAKE_PATH ${CMAKE_PREFIX_PATH})
 include_directories(
 	${Boost_INCLUDE_DIRS}
 	${Qt5Widgets_INCLUDE_DIRS}
