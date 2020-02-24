@@ -34,7 +34,7 @@ install:
       # Qt5.14 introduces a bug in windeployqt -  use prev version until it's fixed
       # https://bugreports.qt.io/browse/QTBUG-80806
     - C:\msys64\usr\bin\bash -lc "wget -q http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-qt5-5.13.2-1-any.pkg.tar.xz"
-   - C:\msys64\usr\bin\bash -lc "pacman -U --noconfirm http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-qt5-5.13.2-1-any.pkg.tar.xz"
+    - C:\msys64\usr\bin\bash -lc "pacman -U --noconfirm http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-qt5-5.13.2-1-any.pkg.tar.xz"
 
     - C:\msys64\usr\bin\bash -lc "wget -q http://repo.msys2.org/mingw/%ARCH%/mingw-w64-%ARCH%-libusb-1.0.21-2-any.pkg.tar.xz"
     - C:\msys64\usr\bin\bash -lc "pacman -U --noconfirm mingw-w64-%ARCH%-libusb-1.0.21-2-any.pkg.tar.xz"
