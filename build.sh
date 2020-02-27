@@ -34,10 +34,10 @@ PATH=/c/msys64/$MINGW_VERSION/bin:$PATH
 
 # Remove dependencies that prevent us from upgrading to GCC 6.2
 
-pacman -Rs --noconfirm mingw-w64-i686-gcc-ada mingw-w64-i686-gcc-fortran mingw-w64-i686-gcc-libgfortran mingw-w64-i686-gcc-objc
-pacman -Rs --noconfirm mingw-w64-x86_64-gcc-ada mingw-w64-x86_64-gcc-fortran mingw-w64-x86_64-gcc-libgfortran mingw-w64-x86_64-gcc-objc
-pacman -Syu --noconfirm
-pacman -Syu --noconfirm
+#pacman -Rs --noconfirm mingw-w64-i686-gcc-ada mingw-w64-i686-gcc-fortran mingw-w64-i686-gcc-libgfortran mingw-w64-i686-gcc-objc
+#pacman -Rs --noconfirm mingw-w64-x86_64-gcc-ada mingw-w64-x86_64-gcc-fortran mingw-w64-x86_64-gcc-libgfortran mingw-w64-x86_64-gcc-objc
+#pacman -Syu --noconfirm
+#pacman -Syu --noconfirm
 
 # Remove existing file that causes GCC install to fail
 rm /mingw32/etc/gdbinit /mingw64/etc/gdbinit
