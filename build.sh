@@ -72,8 +72,9 @@ cd /c ; tar xJf gnuradio-$MINGW_VERSION.tar.xz
 
 
 # Download a 32-bit version of windres.exe
-wget http://swdownloads.analog.com/cse/build/windres.exe.gz -O /c/windres.exe.gz
-cd /c ; gunzip windres.exe.gz
+cd /c
+wget http://swdownloads.analog.com/cse/build/windres.exe.gz
+gunzip windres.exe.gz
 
 # Hack: Qt5Qml CMake script throws errors when loading its plugins. So let's just drop those plugins.
 rm -f /$MINGW_VERSION/lib/cmake/Qt5Qml/*Factory.cmake
