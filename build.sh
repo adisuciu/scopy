@@ -1,7 +1,6 @@
 set -e
 
 export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32
-BUILD=${build}
 WORKDIR=${PWD}
 
 JOBS=3
@@ -85,7 +84,7 @@ cd /c/$BUILD_FOLDER
 cmake -G 'Unix Makefiles' $RC_COMPILER_OPT -DCMAKE_PREFIX_PATH=/c/msys64/$MINGW_VERSION/lib/cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe -DPKG_CONFIG_EXECUTABLE=/$MINGW_VERSION/bin/pkg-config.exe -DCMAKE_C_COMPILER=$ARCH-w64-mingw32-gcc.exe -DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe -DBREAKPAD_HANDLER=ON -DPYTHON_EXECUTABLE=/$MINGW_VERSION/bin/python3.exe /c/projects/scopy
 
 cd /c/$BUILD_FOLDER/resources 
-sed -i 's/^\(FILEVERSION .*\)$/\1,0,"{build}"/' properties.rc
+sed -i  's/^\(FILEVERSION .*\)$/\1,0,'${BUILD}'' properties.rc
 cat properties.rc
 cd /c/build_$ARCH_BIT && make -j3
 
