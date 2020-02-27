@@ -1,7 +1,7 @@
 set -e
 
 export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32
-
+BUILD=${build}
 WORKDIR=${PWD}
 
 JOBS=3

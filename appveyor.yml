@@ -8,6 +8,7 @@ environment:
         - MINGW_VERSION: mingw64
           ARCH: x86_64
           ARCH_BIT: 64
+          BUILD: {build}
 
 #        - MINGW_VERSION: mingw32
 #          ARCH: i686
