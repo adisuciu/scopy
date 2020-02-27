@@ -30,7 +30,7 @@ DEST_FOLDER=scopy_$ARCH_BIT
 BUILD_FOLDER=build_$ARCH_BIT
 DEBUG_FOLDER=debug_$ARCH_BIT
    
-PATH=C:\msys64\$MINGW_VERSION\bin;$PATH
+PATH=/c/msys64/$MINGW_VERSION/bin;$PATH
 
 # Remove dependencies that prevent us from upgrading to GCC 6.2    
 
