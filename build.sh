@@ -32,15 +32,14 @@ DEBUG_FOLDER=debug_$ARCH_BIT
 
 PATH=/c/msys64/$MINGW_VERSION/bin:$PATH
 
-# Remove dependencies that prevent us from upgrading to GCC 6.2
-
-#pacman -Rs --noconfirm mingw-w64-i686-gcc-ada mingw-w64-i686-gcc-fortran mingw-w64-i686-gcc-libgfortran mingw-w64-i686-gcc-objc
-#pacman -Rs --noconfirm mingw-w64-x86_64-gcc-ada mingw-w64-x86_64-gcc-fortran mingw-w64-x86_64-gcc-libgfortran mingw-w64-x86_64-gcc-objc
-#pacman -Syu --noconfirm
-#pacman -Syu --noconfirm
-
 # Remove existing file that causes GCC install to fail
 rm /mingw32/etc/gdbinit /mingw64/etc/gdbinit
+# Remove dependencies that prevent us from upgrading to GCC 6.2
+pacman --force --noconfirm -Sy \
+	mingw-w64-${ARCH}-gcc \
+	mingw-w64-${ARCH}-cmake \
+	autoconf \
+	automake-wrapper
 
 # Update to GCC 6.2 and install dependencies
 pacman --noconfirm -Sy mingw-w64-$ARCH-gcc mingw-w64-$ARCH-boost mingw-w64-$ARCH-python3 mingw-w64-$ARCH-fftw mingw-w64-$ARCH-libzip mingw-w64-$ARCH-glibmm mingw-w64-$ARCH-matio mingw-w64-$ARCH-hdf mingw-w64-$ARCH-orc5
