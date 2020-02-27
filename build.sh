@@ -1,14 +1,34 @@
+set -e
+
+export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32
+
+WORKDIR=${PWD}
+
+JOBS=3
+
+CC=/${MINGW_VERSION}/bin/${ARCH}-w64-mingw32-gcc.exe
+CXX=/${MINGW_VERSION}/bin/${ARCH}-w64-mingw32-g++.exe
+CMAKE_OPTS="-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_INSTALL_PREFIX=/${MINGW_VERSION} \
+	-DCMAKE_C_COMPILER:FILEPATH=${CC} \
+	-DCMAKE_CXX_COMPILER:FILEPATH=${CXX} \
+	-DPKG_CONFIG_EXECUTABLE:FILEPATH=/${MINGW_VERSION}/bin/pkg-config.exe"
+AUTOCONF_OPTS="--prefix=/msys64/${MINGW_VERSION} \
+	--host=${ARCH}-w64-mingw32 \
+	--enable-shared \
+	--disable-static"
+
+if [ ${ARCH} == "i686" ]
+then
+	RC_COMPILER_OPT="-DCMAKE_RC_COMPILER=/c/windres.exe"
+else
+	RC_COMPILER_OPT=""
+fi
+
 OLD_PATH=$PATH
 DEST_FOLDER=scopy_$ARCH_BIT
 BUILD_FOLDER=build_$ARCH_BIT
 DEBUG_FOLDER=debug_$ARCH_BIT
-RC_COMPILER=
-if [ $ARCH_BIT -eq 32 ]
-then
-	RC_COMPILER=-DCMAKE_RC_COMPILER=/c/windres.exe
-fi
-
-echo RC_COMPILER=$RC_COMPILER
    
 PATH=C:\msys64\$MINGW_VERSION\bin;$PATH
 
@@ -56,7 +76,7 @@ rm -f /$MINGW_VERSION/lib/cmake/Qt5Qml/*Factory.cmake
 /$MINGW_VERSION/bin/python3.exe --version
 mkdir /c/$BUILD_FOLDER 
 cd /c/$BUILD_FOLDER 
-cmake -G 'Unix Makefiles' $RC_COMPILER -DCMAKE_PREFIX_PATH=/c/msys64/$MINGW_VERSION/lib/cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe -DPKG_CONFIG_EXECUTABLE=/$MINGW_VERSION/bin/pkg-config.exe -DCMAKE_C_COMPILER=$ARCH-w64-mingw32-gcc.exe -DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe -DBREAKPAD_HANDLER=ON -DPYTHON_EXECUTABLE=/$MINGW_VERSION/bin/python3.exe /c/projects/scopy
+cmake -G 'Unix Makefiles' $RC_COMPILER_OPT -DCMAKE_PREFIX_PATH=/c/msys64/$MINGW_VERSION/lib/cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe -DPKG_CONFIG_EXECUTABLE=/$MINGW_VERSION/bin/pkg-config.exe -DCMAKE_C_COMPILER=$ARCH-w64-mingw32-gcc.exe -DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe -DBREAKPAD_HANDLER=ON -DPYTHON_EXECUTABLE=/$MINGW_VERSION/bin/python3.exe /c/projects/scopy
 
 cd /c/$BUILD_FOLDER/resources && sed -i 's/^\(FILEVERSION .*\)$/\1,0,"{build}"/' properties.rc
 cd /c/build_$ARCH_BIT && make -j3
