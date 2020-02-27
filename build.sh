@@ -29,22 +29,22 @@ OLD_PATH=$PATH
 DEST_FOLDER=scopy_$ARCH_BIT
 BUILD_FOLDER=build_$ARCH_BIT
 DEBUG_FOLDER=debug_$ARCH_BIT
-   
-PATH=/c/msys64/$MINGW_VERSION/bin;$PATH
 
-# Remove dependencies that prevent us from upgrading to GCC 6.2    
+PATH=/c/msys64/$MINGW_VERSION/bin:$PATH
+
+# Remove dependencies that prevent us from upgrading to GCC 6.2
 
 pacman -Rs --noconfirm mingw-w64-i686-gcc-ada mingw-w64-i686-gcc-fortran mingw-w64-i686-gcc-libgfortran mingw-w64-i686-gcc-objc
 pacman -Rs --noconfirm mingw-w64-x86_64-gcc-ada mingw-w64-x86_64-gcc-fortran mingw-w64-x86_64-gcc-libgfortran mingw-w64-x86_64-gcc-objc
-pacman -Syu --noconfirm 
-pacman -Syu --noconfirm 
+pacman -Syu --noconfirm
+pacman -Syu --noconfirm
 
 # Remove existing file that causes GCC install to fail
 rm /mingw32/etc/gdbinit /mingw64/etc/gdbinit
 
 # Update to GCC 6.2 and install dependencies
 pacman --noconfirm -Sy mingw-w64-$ARCH-gcc mingw-w64-$ARCH-boost mingw-w64-$ARCH-python3 mingw-w64-$ARCH-fftw mingw-w64-$ARCH-libzip mingw-w64-$ARCH-glibmm mingw-w64-$ARCH-matio mingw-w64-$ARCH-hdf mingw-w64-$ARCH-orc5
-      
+
 # Install breakpad lib
 wget -q http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz
 pacman -U --noconfirm mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz
@@ -59,7 +59,7 @@ pacman -U --noconfirm mingw-w64-$ARCH-libusb-1.0.21-2-any.pkg.tar.xz
 
 # Install pre-compiled libraries
 wget "https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz
-cd /c ; 
+cd /c ;
 tar xJf scopy-$MINGW_VERSION-build-deps.tar.xz
 
 wget "https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/gnuradio-$MINGW_VERSION.tar.xz
@@ -74,8 +74,8 @@ cd /c ; gunzip windres.exe.gz
 rm -f /$MINGW_VERSION/lib/cmake/Qt5Qml/*Factory.cmake
 
 /$MINGW_VERSION/bin/python3.exe --version
-mkdir /c/$BUILD_FOLDER 
-cd /c/$BUILD_FOLDER 
+mkdir /c/$BUILD_FOLDER
+cd /c/$BUILD_FOLDER
 cmake -G 'Unix Makefiles' $RC_COMPILER_OPT -DCMAKE_PREFIX_PATH=/c/msys64/$MINGW_VERSION/lib/cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe -DPKG_CONFIG_EXECUTABLE=/$MINGW_VERSION/bin/pkg-config.exe -DCMAKE_C_COMPILER=$ARCH-w64-mingw32-gcc.exe -DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe -DBREAKPAD_HANDLER=ON -DPYTHON_EXECUTABLE=/$MINGW_VERSION/bin/python3.exe /c/projects/scopy
 
 cd /c/$BUILD_FOLDER/resources && sed -i 's/^\(FILEVERSION .*\)$/\1,0,"{build}"/' properties.rc
