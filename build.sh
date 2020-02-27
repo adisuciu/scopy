@@ -18,12 +18,12 @@ AUTOCONF_OPTS="--prefix=/msys64/${MINGW_VERSION} \
 	--enable-shared \
 	--disable-static"
 
-if [ ${ARCH} == "i686" ]
-then
-	RC_COMPILER_OPT="-DCMAKE_RC_COMPILER=/c/windres.exe"
-else
+#if [ ${ARCH} == "i686" ]
+#then
+RC_COMPILER_OPT="-DCMAKE_RC_COMPILER=/c/windres.exe"
+#else
 	RC_COMPILER_OPT=""
-fi
+#fi
 
 OLD_PATH=$PATH
 DEST_FOLDER=scopy_$ARCH_BIT
