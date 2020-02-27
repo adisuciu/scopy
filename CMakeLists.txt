@@ -279,14 +279,14 @@ target_link_libraries(${PROJECT_NAME} LINK_PRIVATE
 		${Qt5Concurrent_LIBRARIES}
 		${Qt5Qml_LIBRARIES}
 		${Qt5UiTools_LIBRARIES}
-                gnuradio::gnuradio-runtime
-                gnuradio::gnuradio-analog
-                gnuradio::gnuradio-blocks
-                gnuradio::gnuradio-fft
-                gnuradio::gnuradio-filter
-                gnuradio::gnuradio-pmt
-                gnuradio::gnuradio-iio
-                gnuradio::gnuradio-scopy
+		gnuradio::gnuradio-runtime
+		gnuradio::gnuradio-analog
+		gnuradio::gnuradio-blocks
+		gnuradio::gnuradio-fft
+		gnuradio::gnuradio-filter
+		gnuradio::gnuradio-pmt
+		gnuradio::gnuradio-iio
+		gnuradio::gnuradio-scopy
 		${Boost_LIBRARIES}
 		${QWT_LIBRARIES}
 		${QWTPOLAR_LIBRARIES}
