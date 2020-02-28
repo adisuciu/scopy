@@ -7,22 +7,43 @@ JOBS=3
 
 CC=/${MINGW_VERSION}/bin/${ARCH}-w64-mingw32-gcc.exe
 CXX=/${MINGW_VERSION}/bin/${ARCH}-w64-mingw32-g++.exe
-CMAKE_OPTS="-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_INSTALL_PREFIX=/${MINGW_VERSION} \
+CMAKE_OPTS="
 	-DCMAKE_C_COMPILER:FILEPATH=${CC} \
 	-DCMAKE_CXX_COMPILER:FILEPATH=${CXX} \
-	-DPKG_CONFIG_EXECUTABLE:FILEPATH=/${MINGW_VERSION}/bin/pkg-config.exe"
-AUTOCONF_OPTS="--prefix=/msys64/${MINGW_VERSION} \
-	--host=${ARCH}-w64-mingw32 \
-	--enable-shared \
-	--disable-static"
+	-DPKG_CONFIG_EXECUTABLE=/$MINGW_VERSION/bin/pkg-config.exe \
+	-DCMAKE_PREFIX_PATH=/c/msys64/$MINGW_VERSION/lib/cmake \
+	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+	"
 
-#if [ ${ARCH} == "i686" ]
-#then
-RC_COMPILER_OPT="-DCMAKE_RC_COMPILER=/c/windres.exe"
-#else
+#	-DCMAKE_C_COMPILER=$ARCH-w64-mingw32-gcc.exe \
+#	-DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe \
+
+SCOPY_CMAKE_OPTS="
+	-G 'Unix Makefiles'	\
+	$RC_COMPILER_OPT \
+	-DBREAKPAD_HANDLER=ON \
+	-DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe \
+	-DPYTHON_EXECUTABLE=/$MINGW_VERSION/bin/python3.exe \
+	"
+
+PACMAN_SYNC_DEPS="
+	mingw-w64-$ARCH-gcc \
+	mingw-w64-$ARCH-boost \
+	mingw-w64-$ARCH-python3 \
+	mingw-w64-$ARCH-fftw \
+	mingw-w64-$ARCH-libzip \
+	mingw-w64-$ARCH-glibmm \
+	mingw-w64-$ARCH-matio \
+	mingw-w64-$ARCH-hdf5 \
+	mingw-w64-$ARCH-orc \
+"
+
+if [ ${ARCH} == "i686" ]
+then
+	RC_COMPILER_OPT="-DCMAKE_RC_COMPILER=/c/windres.exe"
+else
 	RC_COMPILER_OPT=""
-#fi
+fi
 
 OLD_PATH=$PATH
 DEST_FOLDER=scopy_$ARCH_BIT
@@ -47,8 +68,7 @@ pacman --force --noconfirm -Sy \
 	automake-wrapper
 
 # Update to GCC 6.2 and install dependencies
-pacman --noconfirm -Sy mingw-w64-$ARCH-gcc mingw-w64-$ARCH-boost mingw-w64-$ARCH-python3 mingw-w64-$ARCH-fftw mingw-w64-$ARCH-libzip mingw-w64-$ARCH-glibmm mingw-w64-$ARCH-matio mingw-w64-$ARCH-hdf5 mingw-w64-$ARCH-orc
-
+pacman --noconfirm -Sy 
 # Install breakpad lib
 wget -q http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz
 pacman -U --noconfirm mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz
@@ -81,10 +101,10 @@ rm -f /$MINGW_VERSION/lib/cmake/Qt5Qml/*Factory.cmake
 /$MINGW_VERSION/bin/python3.exe --version
 mkdir /c/$BUILD_FOLDER
 cd /c/$BUILD_FOLDER
-cmake -G 'Unix Makefiles' $RC_COMPILER_OPT -DCMAKE_PREFIX_PATH=/c/msys64/$MINGW_VERSION/lib/cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe -DPKG_CONFIG_EXECUTABLE=/$MINGW_VERSION/bin/pkg-config.exe -DCMAKE_C_COMPILER=$ARCH-w64-mingw32-gcc.exe -DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe -DBREAKPAD_HANDLER=ON -DPYTHON_EXECUTABLE=/$MINGW_VERSION/bin/python3.exe /c/projects/scopy
+cmake  $CMAKE_OPTS $SCOPY_CMAKE_OPTS /c/projects/scopy
 
 cd /c/$BUILD_FOLDER/resources 
-sed -i  's/^\(FILEVERSION .*\)$/\1,0,'$BUILD_NO'/' properties.rc
+sed -i  's/^\(FILEVERSION .*\)$/\1,'$BUILD_NO'/' properties.rc
 cat properties.rc
 cd /c/build_$ARCH_BIT && make -j3
 
