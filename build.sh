@@ -63,9 +63,6 @@ do
 done
 IFS=$Field_Separator
 
-
-
-
 #if [ ${ARCH} == "i686" ]
 #then
 #	RC_COMPILER_OPT="-DCMAKE_RC_COMPILER=/c/windres.exe"
@@ -130,8 +127,8 @@ cd /c/build_$ARCH_BIT && make $JOBS
 # Copy the dependencies
 
 mkdir c:\$DEST_FOLDER
-copy c:\$BUILD_FOLDER\Scopy.exe c:\$DEST_FOLDER\
-copy c:\$BUILD_FOLDER\qt.conf c:\$DEST_FOLDER\
+cp /c/$BUILD_FOLDER/Scopy.exe /c/$DEST_FOLDER/
+cp /c/$BUILD_FOLDER/qt.conf /c/$DEST_FOLDER/
 
 c:\msys64\$MINGW_VERSION\bin\windeployqt.exe --dir c:\$DEST_FOLDER --release --no-system-d3d-compiler --no-compiler-runtime --no-quick-import --opengl --printsupport c:\$BUILD_FOLDER\Scopy.exe
 cp -r /c/projects/scopy/resources/decoders  /c/$DEST_FOLDER/
@@ -140,12 +137,12 @@ tar -C /c/$DEST_FOLDER --strip-components=3 -xJf /c/scopy-$MINGW_VERSION-build-d
 cd /$MINGW_VERSION/bin ;
 cp -r $DLL_DEPS /c/$DEST_FOLDER/
 
-mkdir C:\scopy_$ARCH_BIT\.debug
+mkdir /c/scopy_$ARCH_BIT/.debug
 #/$MINGW_VERSION/bin/objcopy -v --only-keep-debug /c/$DEST_FOLDER/Scopy.exe /c/$DEST_FOLDER/.debug/Scopy.exe.debug
 dump_syms /c/$DEST_FOLDER/Scopy.exe > /c/$DEST_FOLDER/Scopy.exe.sym
 #/c/msys64/$MINGW_VERSION/bin/strip.exe --strip-debug --strip-unneeded /c/$DEST_FOLDER/Scopy.exe
 #/c/msys64/$MINGW_VERSION/bin/objcopy.exe -v --add-gnu-debuglink=/c/$DEST_FOLDER/.debug/Scopy.exe.debug /c/$DEST_FOLDER/Scopy.exe
-mkdir C:\$DEBUG_FOLDER
-mv C:\$DEST_FOLDER\Scopy.exe.sym C:\$DEBUG_FOLDER
-mv C:\$DEST_FOLDER\.debug C:\$DEBUG_FOLDER
+mkdir /c/$DEBUG_FOLDER
+mv /c/$DEST_FOLDER/Scopy.exe.sym /c/$DEBUG_FOLDER
+mv /c/$DEST_FOLDER/.debug /c/$DEBUG_FOLDER
 
