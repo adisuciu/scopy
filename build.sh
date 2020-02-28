@@ -53,8 +53,8 @@ Field_Separator=$IFS
 IFS=;
 for val in $PRECOMPILED_DEPS;
 do
-	wget -qO- $val | tar -xf - 
 	echo $val
+	wget -O- $val | tar -xf - 
 done
 IFS=$Field_Separator
 
