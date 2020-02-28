@@ -54,7 +54,7 @@ IFS=';'
 for val in $PRECOMPILED_DEPS;
 do
 	echo $val !!! 
-	#wget -O- $val | tar -xf - 
+	wget $val 
 done
 IFS=$Field_Separator
 
