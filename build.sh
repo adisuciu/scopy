@@ -37,6 +37,12 @@ PACMAN_SYNC_DEPS="
 	mingw-w64-$ARCH-hdf5 \
 	mingw-w64-$ARCH-orc \
 "
+PACMAN_REPO_DEPS="
+	http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz \
+	http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-qt5-5.13.2-1-any.pkg.tar.xz \
+	http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-libusb-1.0.21-2-any.pkg.tar.xz \
+"
+
 
 if [ ${ARCH} == "i686" ]
 then
@@ -69,17 +75,18 @@ pacman --force --noconfirm -Sy \
 
 # Update to GCC 6.2 and install dependencies
 pacman --noconfirm -Sy $PACMAN_SYNC_DEPS
+pacman --noconfirm -U  $PACMAN_REPO_DEPS
 # Install breakpad lib
-wget -q http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz
-pacman -U --noconfirm mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz
+#wget -q http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz
+#pacman -U --noconfirm mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz
 
 # Qt5.14 introduces a bug in windeployqt -  use prev version until it's fixed
 # https://bugreports.qt.io/browse/QTBUG-80806
-wget -q http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-qt5-5.13.2-1-any.pkg.tar.xz
-pacman -U --noconfirm http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-qt5-5.13.2-1-any.pkg.tar.xz
+#wget -q http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-qt5-5.13.2-1-any.pkg.tar.xz
+#pacman -U --noconfirm http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-qt5-5.13.2-1-any.pkg.tar.xz
 
-wget -q http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-libusb-1.0.21-2-any.pkg.tar.xz
-pacman -U --noconfirm mingw-w64-$ARCH-libusb-1.0.21-2-any.pkg.tar.xz
+#wget -q http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-libusb-1.0.21-2-any.pkg.tar.xz
+#pacman -U --noconfirm mingw-w64-$ARCH-libusb-1.0.21-2-any.pkg.tar.xz
 
 # Install pre-compiled libraries
 wget "https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz
