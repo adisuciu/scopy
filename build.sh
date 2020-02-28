@@ -68,7 +68,7 @@ pacman --force --noconfirm -Sy \
 	automake-wrapper
 
 # Update to GCC 6.2 and install dependencies
-pacman --noconfirm -Sy 
+pacman --noconfirm -Sy $PACMAN_SYNC_DEPS
 # Install breakpad lib
 wget -q http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz
 pacman -U --noconfirm mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz
