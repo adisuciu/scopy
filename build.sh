@@ -3,7 +3,7 @@ set -e
 export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32
 WORKDIR=${PWD}
 echo BUILD_NO $BUILD_NO
-JOBS=3
+JOBS=-j3
 
 CC=/${MINGW_VERSION}/bin/${ARCH}-w64-mingw32-gcc.exe
 CXX=/${MINGW_VERSION}/bin/${ARCH}-w64-mingw32-g++.exe
@@ -19,7 +19,6 @@ CMAKE_OPTS="
 #	-DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe \
 
 SCOPY_CMAKE_OPTS="
-	-G\"Unix Makefiles\"\
 	$RC_COMPILER_OPT \
 	-DBREAKPAD_HANDLER=ON \
 	-DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe \
@@ -47,9 +46,9 @@ PRECOMPILED_DEPS=\
 "https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH;\
 https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH;\
 "
+DLL_DEPS="libmatio-*.dll libhdf5-*.dll libszip*.dll libpcre*.dll libdouble-conversion*.dll libwinpthread-*.dll libgcc_*.dll libstdc++-*.dll libboost_{system,filesystem,atomic,program_options,regex,thread}-*.dll libglib-*.dll libintl-*.dll libiconv-*.dll libglibmm-2.*.dll libgmodule-2.*.dll libgobject-2.*.dll libffi-*.dll libsigc-2.*.dll libfftw3f-*.dll libicu{in,uc,dt}[!d]*.dll zlib*.dll libharfbuzz-*.dll libfreetype-*.dll libbz2-*.dll libpng16-*.dll libgraphite2.dll libjpeg-*.dll libsqlite3-*.dll libwebp-*.dll libxml2-*.dll liblzma-*.dll libxslt-*.dll libzip*.dll libpython3.*.dll libgnutls*.dll libnettle*.dll libhogweed*.dll libgmp*.dll libidn*.dll libp11*.dll libtasn*.dll libunistring*.dll libusb-*.dll libzstd*.dll libgnuradio-*.dll /$MINGW_VERSION/lib/python3.* libiio*.dll libvolk*.dll liblog4cpp*.dll libad9361*.dll liborc*.dll"
 
 #do we need this ?
-
 #http://swdownloads.analog.com/cse/build/windres.exe.gz;\
 
 Field_Separator=$IFS
@@ -121,12 +120,12 @@ rm -f /$MINGW_VERSION/lib/cmake/Qt5Qml/*Factory.cmake
 /$MINGW_VERSION/bin/python3.exe --version
 mkdir /c/$BUILD_FOLDER
 cd /c/$BUILD_FOLDER
-cmake "$SCOPY_CMAKE_OPTS" /$CMAKE_OPTS c/projects/scopy
+cmake -G"Unix Makefiles" "$SCOPY_CMAKE_OPTS" /$CMAKE_OPTS c/projects/scopy
 
 cd /c/$BUILD_FOLDER/resources
 sed -i  's/^\(FILEVERSION .*\)$/\1,'$BUILD_NO'/' properties.rc
 cat properties.rc
-cd /c/build_$ARCH_BIT && make -j3
+cd /c/build_$ARCH_BIT && make $JOBS
 
 # Copy the dependencies
 
@@ -138,7 +137,8 @@ c:\msys64\$MINGW_VERSION\bin\windeployqt.exe --dir c:\$DEST_FOLDER --release --n
 cp -r /c/projects/scopy/resources/decoders  /c/$DEST_FOLDER/
 
 tar -C /c/$DEST_FOLDER --strip-components=3 -xJf /c/scopy-$MINGW_VERSION-build-deps.tar.xz msys64/$MINGW_VERSION/bin
-cd /$MINGW_VERSION/bin ; cp -r libmatio-*.dll libhdf5-*.dll libszip*.dll libpcre*.dll libdouble-conversion*.dll libwinpthread-*.dll libgcc_*.dll libstdc++-*.dll libboost_{system,filesystem,atomic,program_options,regex,thread}-*.dll libglib-*.dll libintl-*.dll libiconv-*.dll libglibmm-2.*.dll libgmodule-2.*.dll libgobject-2.*.dll libffi-*.dll libsigc-2.*.dll libfftw3f-*.dll libicu{in,uc,dt}[!d]*.dll zlib*.dll libharfbuzz-*.dll libfreetype-*.dll libbz2-*.dll libpng16-*.dll libgraphite2.dll libjpeg-*.dll libsqlite3-*.dll libwebp-*.dll libxml2-*.dll liblzma-*.dll libxslt-*.dll libzip*.dll libpython3.*.dll libgnutls*.dll libnettle*.dll libhogweed*.dll libgmp*.dll libidn*.dll libp11*.dll libtasn*.dll libunistring*.dll libusb-*.dll libzstd*.dll libgnuradio-*.dll /$MINGW_VERSION/lib/python3.* libiio*.dll libvolk*.dll liblog4cpp*.dll libad9361*.dll liborc*.dll /c/$DEST_FOLDER/
+cd /$MINGW_VERSION/bin ;
+cp -r $DLL_DEPS /c/$DEST_FOLDER/
 
 mkdir C:\scopy_$ARCH_BIT\.debug
 #/$MINGW_VERSION/bin/objcopy -v --only-keep-debug /c/$DEST_FOLDER/Scopy.exe /c/$DEST_FOLDER/.debug/Scopy.exe.debug
