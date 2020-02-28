@@ -19,7 +19,7 @@ CMAKE_OPTS="
 #	-DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe \
 
 SCOPY_CMAKE_OPTS="
-	-G 'Unix Makefiles'	\
+	-G \'Unix Makefiles\'	\
 	$RC_COMPILER_OPT \
 	-DBREAKPAD_HANDLER=ON \
 	-DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe \
