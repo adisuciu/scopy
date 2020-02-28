@@ -52,6 +52,7 @@ Field_Separator=$IFS
 IFS=';'
 for val in $PRECOMPILED_DEPS;
 do
+	val= echo $val | sed 's/ *$//g'
 	echo $val !!! 
 	wget $val
 done
