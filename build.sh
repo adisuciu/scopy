@@ -19,7 +19,7 @@ CMAKE_OPTS="
 #	-DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe \
 
 SCOPY_CMAKE_OPTS="
-	-G Unix Makefiles\
+	-G\"Unix Makefiles\"\
 	$RC_COMPILER_OPT \
 	-DBREAKPAD_HANDLER=ON \
 	-DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe \
@@ -120,7 +120,7 @@ rm -f /$MINGW_VERSION/lib/cmake/Qt5Qml/*Factory.cmake
 /$MINGW_VERSION/bin/python3.exe --version
 mkdir /c/$BUILD_FOLDER
 cd /c/$BUILD_FOLDER
-cmake  $CMAKE_OPTS $SCOPY_CMAKE_OPTS /c/projects/scopy
+cmake  $CMAKE_OPTS "$SCOPY_CMAKE_OPTS" /c/projects/scopy
 
 cd /c/$BUILD_FOLDER/resources 
 sed -i  's/^\(FILEVERSION .*\)$/\1,'$BUILD_NO'/' properties.rc
