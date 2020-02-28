@@ -51,18 +51,6 @@ DLL_DEPS="libmatio-*.dll libhdf5-*.dll libszip*.dll libpcre*.dll libdouble-conve
 #do we need this ?
 #http://swdownloads.analog.com/cse/build/windres.exe.gz;\
 
-Field_Separator=$IFS
-IFS=';'
-for val in $PRECOMPILED_DEPS;
-do
-	cd /c
-	val= echo $val | sed 's/ *$//g'
-	echo $val !!!
-	wget -qO- $val | tar -xvJf -
-
-done
-IFS=$Field_Separator
-
 #if [ ${ARCH} == "i686" ]
 #then
 #	RC_COMPILER_OPT="-DCMAKE_RC_COMPILER=/c/windres.exe"
@@ -97,15 +85,15 @@ pacman --noconfirm -Sy $PACMAN_SYNC_DEPS
 pacman --noconfirm -U  $PACMAN_REPO_DEPS
 
 # Install pre-compiled libraries
-#
-#wget "https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz
-#cd /c ;
-#tar xJf scopy-$MINGW_VERSION-build-deps.tar.xz
-#
-#wget "https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/gnuradio-$MINGW_VERSION.tar.xz
-#cd /c ; tar xJf gnuradio-$MINGW_VERSION.tar.xz
-#
-#
+wget "https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz
+cd /c
+tar xJf scopy-$MINGW_VERSION-build-deps.tar.xz
+
+wget "https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/gnuradio-$MINGW_VERSION.tar.xz
+cd /c
+tar xJf gnuradio-$MINGW_VERSION.tar.xz
+
+
 # Download a 32-bit version of windres.exe
 #cd /c
 #wget http://swdownloads.analog.com/cse/build/windres.exe.gz
@@ -133,7 +121,7 @@ cp /c/$BUILD_FOLDER/qt.conf /c/$DEST_FOLDER/
 /c/msys64/$MINGW_VERSION/bin/windeployqt.exe --dir /c/$DEST_FOLDER --release --no-system-d3d-compiler --no-compiler-runtime --no-quick-import --opengl --printsupport /c/$BUILD_FOLDER/Scopy.exe
 cp -r /c/projects/scopy/resources/decoders  /c/$DEST_FOLDER/
 
-tar -C /c/$DEST_FOLDER --strip-components=3 -xJf /c/scopy-$MINGW_VERSION-build-deps.tar.xz msys64/$MINGW_VERSION/bin
+#tar -C /c/$DEST_FOLDER --strip-components=3 -xJf /c/scopy-$MINGW_VERSION-build-deps.tar.xz msys64/$MINGW_VERSION/bin
 cd /$MINGW_VERSION/bin ;
 cp -r $DLL_DEPS /c/$DEST_FOLDER/
 
