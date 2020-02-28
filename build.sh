@@ -44,8 +44,8 @@ PACMAN_REPO_DEPS="
 "
 
 PRECOMPILED_DEPS=\
-"https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz;\
-https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH -O /c/gnuradio-$MINGW_VERSION.tar.xz;\
+"https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH;\
+https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH;\
 "
 
 #do we need this ?
@@ -58,7 +58,7 @@ for val in $PRECOMPILED_DEPS;
 do
 	val= echo $val | sed 's/ *$//g'
 	echo $val !!! 
-	wget -O- $val | tar xJf - 
+	wget -O- $val | tar -xvJf - 
 
 done
 IFS=$Field_Separator
