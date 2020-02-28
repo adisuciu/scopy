@@ -53,7 +53,7 @@ IFS=';'
 for val in $PRECOMPILED_DEPS;
 do
 	echo $val !!! 
-	wget \"$val\"
+	wget "$val"
 done
 IFS=$Field_Separator
 
