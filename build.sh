@@ -19,7 +19,7 @@ CMAKE_OPTS="
 #	-DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe \
 
 SCOPY_CMAKE_OPTS="
-	-G \"Unix Makefiles\"	\
+	-G \"Unix\\ Makefiles\"	\
 	$RC_COMPILER_OPT \
 	-DBREAKPAD_HANDLER=ON \
 	-DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe \
@@ -44,8 +44,18 @@ PACMAN_REPO_DEPS="
 "
 
 PRECOMPILED_DEPS="
+	\"https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH\"; \
 
 "
+Field_Separator=$IFS
+IFS=;
+for val in $PRECOMPILED_DEPS;
+do
+	echo $val
+done
+IFS=$Field_Separator
+
+
 
 
 if [ ${ARCH} == "i686" ]
@@ -82,6 +92,7 @@ pacman --noconfirm -Sy $PACMAN_SYNC_DEPS
 pacman --noconfirm -U  $PACMAN_REPO_DEPS
 
 # Install pre-compiled libraries
+
 wget "https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz
 cd /c ;
 tar xJf scopy-$MINGW_VERSION-build-deps.tar.xz
