@@ -45,15 +45,15 @@ PACMAN_REPO_DEPS="
 
 PRECOMPILED_DEPS=\
 "https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH; \
-https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH; \
-http://swdownloads.analog.com/cse/build/windres.exe.gz; \
+https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH;\
+/swdownloads.analog.com/cse/build/windres.exe.gz; \
 "
 Field_Separator=$IFS
 IFS=';'
 for val in $PRECOMPILED_DEPS;
 do
 	echo $val !!! 
-	wget "$val"
+	wget $val
 done
 IFS=$Field_Separator
 
