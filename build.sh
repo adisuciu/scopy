@@ -121,7 +121,7 @@ rm -f /$MINGW_VERSION/lib/cmake/Qt5Qml/*Factory.cmake
 /$MINGW_VERSION/bin/python3.exe --version
 mkdir /c/$BUILD_FOLDER
 cd /c/$BUILD_FOLDER
-cmake  $CMAKE_OPTS "$(SCOPY_CMAKE_OPTS)" /c/projects/scopy
+cmake  $CMAKE_OPTS "$SCOPY_CMAKE_OPTS" /c/projects/scopy
 
 cd /c/$BUILD_FOLDER/resources
 sed -i  's/^\(FILEVERSION .*\)$/\1,'$BUILD_NO'/' properties.rc
