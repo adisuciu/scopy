@@ -50,7 +50,7 @@ PRECOMPILED_DEPS="
 
 "
 Field_Separator=$IFS
-IFS=;
+IFS=';'
 for val in $PRECOMPILED_DEPS;
 do
 	echo $val
