@@ -44,29 +44,34 @@ PACMAN_REPO_DEPS="
 "
 
 PRECOMPILED_DEPS=\
-"https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH;\
-https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH;\
-http://swdownloads.analog.com/cse/build/windres.exe.gz;\
+"https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz;\
+https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH -O /c/gnuradio-$MINGW_VERSION.tar.xz;\
 "
+
+#do we need this ?
+
+#http://swdownloads.analog.com/cse/build/windres.exe.gz;\
+
 Field_Separator=$IFS
 IFS=';'
 for val in $PRECOMPILED_DEPS;
 do
 	val= echo $val | sed 's/ *$//g'
 	echo $val !!! 
-	wget -O- $val | tar xzvf - 
+	wget -O- $val | tar xJf - 
+
 done
 IFS=$Field_Separator
 
 
 
 
-if [ ${ARCH} == "i686" ]
-then
-	RC_COMPILER_OPT="-DCMAKE_RC_COMPILER=/c/windres.exe"
-else
-	RC_COMPILER_OPT=""
-fi
+#if [ ${ARCH} == "i686" ]
+#then
+#	RC_COMPILER_OPT="-DCMAKE_RC_COMPILER=/c/windres.exe"
+#else
+#	RC_COMPILER_OPT=""
+#fi
 
 OLD_PATH=$PATH
 DEST_FOLDER=scopy_$ARCH_BIT
@@ -95,19 +100,19 @@ pacman --noconfirm -Sy $PACMAN_SYNC_DEPS
 pacman --noconfirm -U  $PACMAN_REPO_DEPS
 
 # Install pre-compiled libraries
-
-wget "https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz
-cd /c ;
-tar xJf scopy-$MINGW_VERSION-build-deps.tar.xz
-
-wget "https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/gnuradio-$MINGW_VERSION.tar.xz
-cd /c ; tar xJf gnuradio-$MINGW_VERSION.tar.xz
-
-
+#
+#wget "https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz
+#cd /c ;
+#tar xJf scopy-$MINGW_VERSION-build-deps.tar.xz
+#
+#wget "https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/gnuradio-$MINGW_VERSION.tar.xz
+#cd /c ; tar xJf gnuradio-$MINGW_VERSION.tar.xz
+#
+#
 # Download a 32-bit version of windres.exe
-cd /c
-wget http://swdownloads.analog.com/cse/build/windres.exe.gz
-gunzip windres.exe.gz
+#cd /c
+#wget http://swdownloads.analog.com/cse/build/windres.exe.gz
+#gunzip windres.exe.gz
 
 # Hack: Qt5Qml CMake script throws errors when loading its plugins. So let's just drop those plugins.
 rm -f /$MINGW_VERSION/lib/cmake/Qt5Qml/*Factory.cmake
