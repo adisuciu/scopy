@@ -19,7 +19,7 @@ CMAKE_OPTS="
 #	-DCMAKE_CXX_COMPILER=$ARCH-w64-mingw32-g++.exe \
 
 SCOPY_CMAKE_OPTS="
-	-G \"Unix\\ Makefiles\"	\
+	-G \"Unix\ Makefiles\"	\
 	$RC_COMPILER_OPT \
 	-DBREAKPAD_HANDLER=ON \
 	-DGIT_EXECUTABLE=/c/Program\\ Files/Git/cmd/git.exe \
@@ -45,12 +45,15 @@ PACMAN_REPO_DEPS="
 
 PRECOMPILED_DEPS="
 	\"https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH\"; \
+	\"https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH\"; \
+	\"http://swdownloads.analog.com/cse/build/windres.exe.gz\" \
 
 "
 Field_Separator=$IFS
 IFS=;
 for val in $PRECOMPILED_DEPS;
 do
+	wget -qO- $val | tar -xf - 
 	echo $val
 done
 IFS=$Field_Separator
