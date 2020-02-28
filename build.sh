@@ -56,9 +56,10 @@ Field_Separator=$IFS
 IFS=';'
 for val in $PRECOMPILED_DEPS;
 do
+	cd /c
 	val= echo $val | sed 's/ *$//g'
-	echo $val !!! 
-	wget -O- $val | tar -xvJf - 
+	echo $val !!!
+	wget -qO- $val | tar -xvJf -
 
 done
 IFS=$Field_Separator
@@ -122,7 +123,7 @@ mkdir /c/$BUILD_FOLDER
 cd /c/$BUILD_FOLDER
 cmake  $CMAKE_OPTS "$(SCOPY_CMAKE_OPTS)" /c/projects/scopy
 
-cd /c/$BUILD_FOLDER/resources 
+cd /c/$BUILD_FOLDER/resources
 sed -i  's/^\(FILEVERSION .*\)$/\1,'$BUILD_NO'/' properties.rc
 cat properties.rc
 cd /c/build_$ARCH_BIT && make -j3
