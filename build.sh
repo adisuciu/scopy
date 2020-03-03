@@ -5,7 +5,8 @@ set -e
 SCOPY_MINGW_BUILD_DEPS_FORK=adisuciu
 SCOPY_MINGW_BUILD_DEPS_BRANCH=master
 
-export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32:/c/Program\ Files/7-Zip
+export PATH=$PATH:/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32:/c/Program\ Files/7-Zip
+echo $PATH
 WORKDIR=${PWD}
 echo BUILD_NO $BUILD_NO
 JOBS=-j3
@@ -110,6 +111,7 @@ dump_syms /c/$DEST_FOLDER/Scopy.exe > /c/$DEST_FOLDER/Scopy.exe.sym
 mkdir /c/$DEBUG_FOLDER
 mv /c/$DEST_FOLDER/Scopy.exe.sym /c/$DEBUG_FOLDER
 mv /c/$DEST_FOLDER/.debug /c/$DEBUG_FOLDER
-7z a "/c/scopy-%ARCH_BIT%bit.zip" /c/%DEST_FOLDER%
-7z a "/c/debug-%ARCH_BIT%bit.zip" /c/%DEBUG_FOLDER%
+7z a "/c/scopy-%ARCH_BIT%bit.zip" /c/$DEST_FOLDER
+7z a "/c/debug-%ARCH_BIT%bit.zip" /c/$DEBUG_FOLDER
+ISCC /Q C:\%BUILD_FOLDER%\scopy-%ARCH_BIT%.iss
 
