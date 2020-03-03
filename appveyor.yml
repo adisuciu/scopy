@@ -23,9 +23,6 @@ install:
 
 build_script:
     - C:\msys64\usr\bin\bash build.sh
-    - mkdir C:\%DEBUG_FOLDER%
-    - mv C:\%DEST_FOLDER%\Scopy.exe.sym C:\%DEBUG_FOLDER%
-    - mv C:\%DEST_FOLDER%\.debug C:\%DEBUG_FOLDER%
 
     - 7z a "c:\scopy-%ARCH_BIT%bit.zip" c:\%DEST_FOLDER%
     - appveyor PushArtifact c:\scopy-%ARCH_BIT%bit.zip
