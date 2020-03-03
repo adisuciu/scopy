@@ -7,7 +7,7 @@ SCOPY_MINGW_BUILD_DEPS_BRANCH=master
 
 export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32:/c/Program\ Files/7-Zip:/c/Program\ Files\ \(x86\)/Inno\ Setup\ \5
 echo $PATH
-iscc //q 
+
 WORKDIR=${PWD}
 echo BUILD_NO $BUILD_NO
 JOBS=-j3
@@ -114,5 +114,5 @@ mv /c/$DEST_FOLDER/Scopy.exe.sym /c/$DEBUG_FOLDER
 mv /c/$DEST_FOLDER/.debug /c/$DEBUG_FOLDER
 7z a "/c/scopy-%ARCH_BIT%bit.zip" /c/$DEST_FOLDER
 7z a "/c/debug-%ARCH_BIT%bit.zip" /c/$DEBUG_FOLDER
-ISCC /Q /c/$BUILD_FOLDER/scopy-$ARCH_BIT.iss
+iscc //Qp /c/$BUILD_FOLDER/scopy-$ARCH_BIT.iss
 
