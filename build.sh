@@ -1,4 +1,9 @@
+#!/usr/bin/bash.exe
+
 set -e
+
+SCOPY_MINGW_BUILD_DEPS_FORK=analogdevicesinc
+SCOPY_MINGW_BUILD_DEPS_BRANCH=disable-gr
 
 export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32
 WORKDIR=${PWD}
@@ -25,27 +30,24 @@ SCOPY_CMAKE_OPTS="
 	-DPYTHON_EXECUTABLE=/$MINGW_VERSION/bin/python3.exe \
 	"
 
+# Install pre-compiled libraries
+wget "https://ci.appveyor.com/api/projects/$SCOPY_MINGW_BUILD_DEPS_FORK/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps-pacman.txt?branch=$SCOPY_MINGW_BUILD_DEPS_BRANCH&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps-pacman.txt
+wget "https://ci.appveyor.com/api/projects/$SCOPY_MINGW_BUILD_DEPS_FORK/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=$SCOPY_MINGW_BUILD_DEPS_BRANCH&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz
+cd /c
+tar xJf scopy-$MINGW_VERSION-build-deps.tar.xz
+
+SCOPY_MINGW_BUILD_DEPS_PACMAN=$(scopy-$MINGW_VERSION-build-deps-pacman.txt)
 PACMAN_SYNC_DEPS="
-	mingw-w64-$ARCH-gcc \
-	mingw-w64-$ARCH-boost \
-	mingw-w64-$ARCH-python3 \
-	mingw-w64-$ARCH-fftw \
-	mingw-w64-$ARCH-libzip \
-	mingw-w64-$ARCH-glibmm \
+	$SCOPY_MINGW_BUILD_DEPS_PACMAN\
 	mingw-w64-$ARCH-matio \
-	mingw-w64-$ARCH-hdf5 \
-	mingw-w64-$ARCH-orc \
 "
+
 PACMAN_REPO_DEPS="
 	http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-breakpad-git-r1680.70914b2d-1-any.pkg.tar.xz \
 	http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-qt5-5.13.2-1-any.pkg.tar.xz \
 	http://repo.msys2.org/mingw/$ARCH/mingw-w64-$ARCH-libusb-1.0.21-2-any.pkg.tar.xz \
 "
 
-PRECOMPILED_DEPS=\
-"https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH;\
-https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH;\
-"
 DLL_DEPS="libmatio-*.dll libhdf5-*.dll libszip*.dll libpcre*.dll libdouble-conversion*.dll libwinpthread-*.dll libgcc_*.dll libstdc++-*.dll libboost_{system,filesystem,atomic,program_options,regex,thread}-*.dll libglib-*.dll libintl-*.dll libiconv-*.dll libglibmm-2.*.dll libgmodule-2.*.dll libgobject-2.*.dll libffi-*.dll libsigc-2.*.dll libfftw3f-*.dll libicu{in,uc,dt}[!d]*.dll zlib*.dll libharfbuzz-*.dll libfreetype-*.dll libbz2-*.dll libpng16-*.dll libgraphite2.dll libjpeg-*.dll libsqlite3-*.dll libwebp-*.dll libxml2-*.dll liblzma-*.dll libxslt-*.dll libzip*.dll libpython3.*.dll libgnutls*.dll libnettle*.dll libhogweed*.dll libgmp*.dll libidn*.dll libp11*.dll libtasn*.dll libunistring*.dll libusb-*.dll libzstd*.dll libgnuradio-*.dll /$MINGW_VERSION/lib/python3.* libiio*.dll libvolk*.dll liblog4cpp*.dll libad9361*.dll liborc*.dll"
 
 #do we need this ?
@@ -65,39 +67,13 @@ DEBUG_FOLDER=debug_$ARCH_BIT
 
 PATH=/c/msys64/$MINGW_VERSION/bin:$PATH
 
-# Remove dependencies that prevent us from upgrading to GCC 6.2
-pacman -Rs --noconfirm \
-	mingw-w64-${ARCH}-gcc-ada \
-	mingw-w64-${ARCH}-gcc-fortran \
-	mingw-w64-${ARCH}-gcc-libgfortran \
-	mingw-w64-${ARCH}-gcc-objc
-# Remove existing file that causes GCC install to fail
-rm /mingw32/etc/gdbinit /mingw64/etc/gdbinit
-# Update to GCC 6.2 and install build-time dependencies
-pacman --force --noconfirm -Sy \
-	mingw-w64-${ARCH}-gcc \
-	mingw-w64-${ARCH}-cmake \
-	autoconf \
-	automake-wrapper
-
-# Update to GCC 6.2 and install dependencies
 pacman --noconfirm -Sy $PACMAN_SYNC_DEPS
 pacman --noconfirm -U  $PACMAN_REPO_DEPS
 
-# Install pre-compiled libraries
-wget "https://ci.appveyor.com/api/projects/analogdevicesinc/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=disable_gr&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz
-cd /c
-tar xJf scopy-$MINGW_VERSION-build-deps.tar.xz
-
-wget "https://ci.appveyor.com/api/projects/adisuciu/gnuradio/artifacts/gnuradio-$MINGW_VERSION.tar.xz?branch=ming-3.8&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/gnuradio-$MINGW_VERSION.tar.xz
-cd /c
-tar xJf gnuradio-$MINGW_VERSION.tar.xz
-
-
 # Download a 32-bit version of windres.exe
-#cd /c
-#wget http://swdownloads.analog.com/cse/build/windres.exe.gz
-#gunzip windres.exe.gz
+cd /c
+wget http://swdownloads.analog.com/cse/build/windres.exe.gz
+gunzip windres.exe.gz
 
 # Hack: Qt5Qml CMake script throws errors when loading its plugins. So let's just drop those plugins.
 rm -f /$MINGW_VERSION/lib/cmake/Qt5Qml/*Factory.cmake
