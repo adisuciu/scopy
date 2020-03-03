@@ -112,7 +112,7 @@ dump_syms /c/$DEST_FOLDER/Scopy.exe > /c/$DEST_FOLDER/Scopy.exe.sym
 mkdir /c/$DEBUG_FOLDER
 mv /c/$DEST_FOLDER/Scopy.exe.sym /c/$DEBUG_FOLDER
 mv /c/$DEST_FOLDER/.debug /c/$DEBUG_FOLDER
-7z a "/c/scopy-%ARCH_BIT%bit.zip" /c/$DEST_FOLDER
-7z a "/c/debug-%ARCH_BIT%bit.zip" /c/$DEBUG_FOLDER
+7z a "/c/scopy-${ARCH_BIT}bit.zip" /c/$DEST_FOLDER
+7z a "/c/debug-${ARCH_BIT}bit.zip" /c/$DEBUG_FOLDER
 iscc //Qp /c/$BUILD_FOLDER/scopy-$ARCH_BIT.iss
 
