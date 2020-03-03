@@ -2,7 +2,7 @@
 
 set -e
 
-SCOPY_MINGW_BUILD_DEPS_FORK=analogdevicesinc
+SCOPY_MINGW_BUILD_DEPS_FORK=adisuciu
 SCOPY_MINGW_BUILD_DEPS_BRANCH=disable-gr
 
 export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32
