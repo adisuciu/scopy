@@ -25,6 +25,7 @@ build_script:
     - set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"
     - C:\msys64\usr\bin\bash build.sh
 
+    - echo "### Push artifacts ... "
     - appveyor PushArtifact c:\scopy-%ARCH_BIT%bit.zip
     - appveyor PushArtifact C:\debug-%ARCH_BIT%bit.zip
    

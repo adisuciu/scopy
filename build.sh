@@ -5,7 +5,7 @@ set -e
 SCOPY_MINGW_BUILD_DEPS_FORK=adisuciu
 SCOPY_MINGW_BUILD_DEPS_BRANCH=master
 
-export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32:/c/Program\ Files/7-Zip:/c/Program\ Files\ \(x86\)/Inno\ Setup\ \5
+export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32:/c/Program\ Files/7-Zip:/c/Program\ Files\ \(x86\)/Inno\ Setup\ \5:/c/Program\ Files/Appveyor/BuildAgent
 echo $PATH
 
 WORKDIR=${PWD}
@@ -29,7 +29,7 @@ SCOPY_CMAKE_OPTS="
 	-DPYTHON_EXECUTABLE=/$MINGW_VERSION/bin/python3.exe \
 	"
 
-# Install pre-compiled libraries
+echo "Download and install pre-compiled libraries ... "
 wget -q "https://ci.appveyor.com/api/projects/$SCOPY_MINGW_BUILD_DEPS_FORK/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps-pacman.txt?branch=$SCOPY_MINGW_BUILD_DEPS_BRANCH&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps-pacman.txt
 wget -q "https://ci.appveyor.com/api/projects/$SCOPY_MINGW_BUILD_DEPS_FORK/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps.tar.xz?branch=$SCOPY_MINGW_BUILD_DEPS_BRANCH&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O /c/scopy-$MINGW_VERSION-build-deps.tar.xz
 cd /c
@@ -66,7 +66,7 @@ BUILD_FOLDER=build_$ARCH_BIT
 DEBUG_FOLDER=debug_$ARCH_BIT
 
 PATH=/c/msys64/$MINGW_VERSION/bin:$PATH
-
+echo "### Installing the dependencies"
 pacman --noconfirm -Sy $PACMAN_SYNC_DEPS
 pacman --noconfirm -U  $PACMAN_REPO_DEPS
 
@@ -78,6 +78,7 @@ gunzip windres.exe.gz
 # Hack: Qt5Qml CMake script throws errors when loading its plugins. So let's just drop those plugins.
 rm -f /$MINGW_VERSION/lib/cmake/Qt5Qml/*Factory.cmake
 
+echo "### Building Scopy ..."
 /$MINGW_VERSION/bin/python3.exe --version
 mkdir /c/$BUILD_FOLDER
 cd /c/$BUILD_FOLDER
@@ -88,8 +89,8 @@ sed -i  's/^\(FILEVERSION .*\)$/\1,'$BUILD_NO'/' properties.rc
 cat properties.rc
 cd /c/build_$ARCH_BIT && make $JOBS
 
-# Copy the dependencies
 
+echo "### Deploy the application (copy the dependencies) ..."
 mkdir /c/$DEST_FOLDER
 cp /c/$BUILD_FOLDER/Scopy.exe /c/$DEST_FOLDER/
 cp /c/$BUILD_FOLDER/qt.conf /c/$DEST_FOLDER/
@@ -101,15 +102,20 @@ cp -r /c/projects/scopy/resources/decoders  /c/$DEST_FOLDER/
 cd /$MINGW_VERSION/bin ;
 cp -r $DLL_DEPS /c/$DEST_FOLDER/
 
+echo "### Extracting debug symbols ..."
 mkdir /c/scopy_$ARCH_BIT/.debug
 #/$MINGW_VERSION/bin/objcopy -v --only-keep-debug /c/$DEST_FOLDER/Scopy.exe /c/$DEST_FOLDER/.debug/Scopy.exe.debug
-dump_syms /c/$DEST_FOLDER/Scopy.exe > /c/$DEST_FOLDER/Scopy.exe.sym
+dump_syms -r /c/$DEST_FOLDER/Scopy.exe > /c/$DEST_FOLDER/Scopy.exe.sym
 #/c/msys64/$MINGW_VERSION/bin/strip.exe --strip-debug --strip-unneeded /c/$DEST_FOLDER/Scopy.exe
 #/c/msys64/$MINGW_VERSION/bin/objcopy.exe -v --add-gnu-debuglink=/c/$DEST_FOLDER/.debug/Scopy.exe.debug /c/$DEST_FOLDER/Scopy.exe
 mkdir /c/$DEBUG_FOLDER
 mv /c/$DEST_FOLDER/Scopy.exe.sym /c/$DEBUG_FOLDER
 mv /c/$DEST_FOLDER/.debug /c/$DEBUG_FOLDER
-7z a "/c/scopy-${ARCH_BIT}bit.zip" /c/$DEST_FOLDER
-7z a "/c/debug-${ARCH_BIT}bit.zip" /c/$DEBUG_FOLDER
-iscc //Qp /c/$BUILD_FOLDER/scopy-$ARCH_BIT.iss
 
+echo "### Creating archives ... "
+7z a "/c/scopy-${ARCH_BIT}bit.zip" /c/$DEST_FOLDER
+# appveyor PushArtifact /c/scopy-${ARCH_BIT}bit.zip
+7z a "/c/debug-${ARCH_BIT}bit.zip" /c/$DEBUG_FOLDER
+# appveyor PushArtifact /c/debug-${ARCH_BIT}bit.zip
+iscc //Qp /c/$BUILD_FOLDER/scopy-$ARCH_BIT.iss
+# appveyor PushArtifact /c/$BUILD_FOLDER/scopy-$ARCH_BIT.iss
