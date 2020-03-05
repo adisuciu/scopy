@@ -198,8 +198,7 @@ build_qwtpolar() {
 	wget https://downloads.sourceforge.net/project/qwtpolar/qwtpolar/1.1.1/qwtpolar-1.1.1.tar.bz2 -O- \
 		| tar xj --strip-components=1 -C ${WORKDIR}/qwtpolar
 
-	cd ~
-	cd qwtpolar-1.1.1
+	cd ~/qwtpolar
 	curl -o qwtpolar-qwt-6.1-compat.patch https://raw.githubusercontent.com/analogdevicesinc/scopy-flatpak/master/qwtpolar-qwt-6.1-compat.patch
 	patch -p1 < qwtpolar-qwt-6.1-compat.patch
 	sed -i 's/\/usr\/local\/qwtpolar-$$QWT_POLAR_VERSION/\/usr\/local/g' qwtpolarconfig.pri
