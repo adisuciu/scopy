@@ -4,11 +4,16 @@ init:
     - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 environment:
+    BUILD_NO: $(appveyor_build_number)
     matrix:
-        - MINGW_VERSION: mingw64
-          ARCH: x86_64
+#        - MINGW_VERSION: mingw64
+#  ARCH: x86_64
+#  ARCH_BIT: 64
+#  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+
+        - ARCH: x86_64
           ARCH_BIT: 64
-          BUILD_NO: $(appveyor_build_number)
+          APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
 
 #        - MINGW_VERSION: mingw32
 #          ARCH: i686
@@ -22,9 +27,10 @@ install:
     - choco install InnoSetup
 
 build_script:
-    - set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"
-    - C:\msys64\usr\bin\bash build.sh
-
+    - cmd: set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"
+    - cmd: C:\msys64\usr\bin\bash build_appveyor_mingw.sh
+    - sh: install_deps.sh
+    - sh: build_appveyor_ubuntu.sh
     - echo "### Push artifacts ... "
     - appveyor PushArtifact c:\scopy-%ARCH_BIT%bit.zip
     - appveyor PushArtifact C:\debug-%ARCH_BIT%bit.zip
