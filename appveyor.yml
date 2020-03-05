@@ -29,8 +29,8 @@ install:
 build_script:
     - cmd: set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"
     - cmd: C:\msys64\usr\bin\bash build_appveyor_mingw.sh
-    - sh: install_deps.sh
-    - sh: build_appveyor_ubuntu.sh
+    - sh: /home/appveyor/projects/scopy/install_deps.sh
+    - sh: /home/appveyor/projects/scopy/build_appveyor_ubuntu.sh
     - echo "### Push artifacts ... "
     - appveyor PushArtifact c:\scopy-%ARCH_BIT%bit.zip
     - appveyor PushArtifact C:\debug-%ARCH_BIT%bit.zip
