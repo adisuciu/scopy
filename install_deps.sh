@@ -142,7 +142,7 @@ build_libsigrok() {
 	git clone --depth 1 https://github.com/sigrokproject/libsigrok.git -b $LIBSIGROK_BRANCH ${WORKDIR}/libsigrok
 
 	mkdir ${WORKDIR}/libsigrok/build-${ARCH}
-	cd ${WORKDIR}/libsigrok/build-${ARCH}
+	cd ${WORKDIR}/libsigrok
 
 	./autogen.sh
 	./configure --disable-all-drivers --enable-bindings --enable-cxx
@@ -164,7 +164,7 @@ build_libsigrokdecode() {
 	wget http://sigrok.org/download/source/libsigrokdecode/libsigrokdecode-0.4.1.tar.gz -O- \
 		| tar xz --strip-components=1 -C ${WORKDIR}/libsigrokdecode
 
-	cd build-${ARCH}
+#	cd build-${ARCH}
 
 	./configure
 	sudo make $JOBS install
