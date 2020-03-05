@@ -43,7 +43,8 @@ build_libiio() {
 		-DPYTHON_BINDINGS:BOOL=OFF \
 		${WORKDIR}/libiio
 
-	make ${JOBS} install
+	make $JOBS
+	sudo make ${JOBS} install
 	DESTDIR=${WORKDIR} make ${JOBS} install
 }
 
@@ -59,7 +60,8 @@ build_libad9361() {
 	cmake ${CMAKE_OPTS} \
 		${WORKDIR}/libad9361
 
-	make $JOBS install
+	make $JOBS
+	sudo make $JOBS install
 	DESTDIR=${WORKDIR} make $JOBS install
 }
 
@@ -74,7 +76,8 @@ build_griio() {
 	cmake ${CMAKE_OPTS} \
 		${WORKDIR}/gr-iio
 
-	make $JOBS install
+	make $JOBS
+	sudo make $JOBS install
 	DESTDIR=${WORKDIR} make $JOBS install
 }
 
@@ -89,7 +92,8 @@ build_grm2k() {
 	cmake ${CMAKE_OPTS} \
 		${WORKDIR}/gr-m2k
 
-	make $JOBS install
+	make $JOBS
+	sudo make $JOBS install
 	DESTDIR=${WORKDIR} make $JOBS install
 
 }
@@ -105,7 +109,8 @@ build_grscopy() {
 	cmake ${CMAKE_OPTS} \
 		${WORKDIR}/gr-scopy
 
-	make $JOBS install
+	make $JOBS
+	sudo make $JOBS install
 	DESTDIR=${WORKDIR} make $JOBS install
 }
 
@@ -120,7 +125,7 @@ build_libsigrok() {
 	./autogen.sh
 	./configure --disable-all-drivers --enable-bindings --enable-cxx
 
-	make $JOBS install
+	sudo make $JOBS install
 	DESTDIR=${WORKDIR} make $JOBS install
 
 	# For some reason, Scopy chokes if these are present in enums.hpp
@@ -140,7 +145,7 @@ build_libsigrokdecode() {
 	cd build-${ARCH}
 
 	./configure
-	make $JOBS install
+	sudo make $JOBS install
 	DESTDIR=${WORKDIR} make $JOBS install
 }
 
@@ -159,7 +164,7 @@ build_qwt() {
 	sed -i 's/\/usr\/local\/qwt-$$QWT_VERSION-svn/\/usr\/local/g' qwtconfig.pri
 
 	qmake qwt.pro
-	make
+	make $JOBS
 	sudo make install
 }
 
@@ -179,7 +184,7 @@ build_qwtpolar() {
 	sed -i 's/QWT_POLAR_CONFIG     += QwtPolarExamples/ /g' qwtpolarconfig.pri
 	sed -i 's/QWT_POLAR_CONFIG     += QwtPolarDesigner/ /g' qwtpolarconfig.pri
 	qmake qwtpolar.pro
-	make
+	make $JOBS
 	sudo make install
 
 }
