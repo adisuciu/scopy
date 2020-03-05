@@ -45,7 +45,7 @@ build_libiio() {
 
 	make $JOBS
 	sudo make ${JOBS} install
-	DESTDIR=${WORKDIR} make ${JOBS} install
+#	DESTDIR=${WORKDIR} make ${JOBS} install
 }
 
 build_libad9361() {
@@ -62,7 +62,7 @@ build_libad9361() {
 
 	make $JOBS
 	sudo make $JOBS install
-	DESTDIR=${WORKDIR} make $JOBS install
+	#DESTDIR=${WORKDIR} make $JOBS install
 }
 
 build_griio() {
@@ -78,7 +78,7 @@ build_griio() {
 
 	make $JOBS
 	sudo make $JOBS install
-	DESTDIR=${WORKDIR} make $JOBS install
+	#DESTDIR=${WORKDIR} make $JOBS install
 }
 
 build_grm2k() {
@@ -94,7 +94,7 @@ build_grm2k() {
 
 	make $JOBS
 	sudo make $JOBS install
-	DESTDIR=${WORKDIR} make $JOBS install
+	#DESTDIR=${WORKDIR} make $JOBS install
 
 }
 
@@ -111,7 +111,7 @@ build_grscopy() {
 
 	make $JOBS
 	sudo make $JOBS install
-	DESTDIR=${WORKDIR} make $JOBS install
+	#DESTDIR=${WORKDIR} make $JOBS install
 }
 
 build_libsigrok() {
@@ -126,7 +126,7 @@ build_libsigrok() {
 	./configure --disable-all-drivers --enable-bindings --enable-cxx
 
 	sudo make $JOBS install
-	DESTDIR=${WORKDIR} make $JOBS install
+	#DESTDIR=${WORKDIR} make $JOBS install
 
 	# For some reason, Scopy chokes if these are present in enums.hpp
 	sed -i "s/static const Quantity \* const DIFFERENCE;$//g" ${WORKDIR}/msys64/${MINGW_VERSION}/include/libsigrokcxx/enums.hpp
@@ -146,7 +146,7 @@ build_libsigrokdecode() {
 
 	./configure
 	sudo make $JOBS install
-	DESTDIR=${WORKDIR} make $JOBS install
+	#DESTDIR=${WORKDIR} make $JOBS install
 }
 
 build_qwt() {
