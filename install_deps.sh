@@ -48,6 +48,28 @@ build_libiio() {
 #	DESTDIR=${WORKDIR} make ${JOBS} install
 }
 
+build_libm2k() {
+
+	echo "### Building libm2k - branch $LIBM2K_BRANCH"
+
+	cd ~
+	git clone --depth 1 https://github.com/analogdevicesinc/libm2k.git -b $LIBM2K_BRANCH ${WORKDIR}/libm2k
+
+	mkdir ${WORKDIR}/libm2k/build-${ARCH}
+	cd ${WORKDIR}/libm2k/build-${ARCH}
+
+	cmake	${CMAKE_OPTS} \
+		-DENABLE_PYTHON=OFF\
+		-DENABLE_CSHARP=OFF\
+		-DENABLE_EXAMPLES=OFF\
+		-DENABLE_TOOLS=OFF\
+		-DINSTALL_UDEV_RULES=OFF\
+		${WORKDIR}/libm2k
+
+	make $JOBS
+	sudo make ${JOBS} install
+	#DESTDIR=${WORKDIR} make ${JOBS} install
+}
 build_libad9361() {
 	echo "### Building libad9361 - branch $LIBAD9361_BRANCH"
 
