@@ -2,8 +2,7 @@
 
 JOBS=$JOBS
 
-cd ~
-cd scopy
+cd ~/projects/scopy
 mkdir build
 cd build
 cmake ../
