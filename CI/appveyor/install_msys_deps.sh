@@ -4,9 +4,7 @@ set -e
 
 SCOPY_MINGW_BUILD_DEPS_FORK=analogdevicesinc
 SCOPY_MINGW_BUILD_DEPS_BRANCH=master
-
-WORKDIR=${PWD}
-echo BUILD_NO $BUILD_NO
+WORKDIR=$PWD
 
 echo "Download and install pre-compiled libraries ... "
 wget "https://ci.appveyor.com/api/projects/$SCOPY_MINGW_BUILD_DEPS_FORK/scopy-mingw-build-deps/artifacts/scopy-$MINGW_VERSION-build-deps-pacman.txt?branch=$SCOPY_MINGW_BUILD_DEPS_BRANCH&job=Environment: MINGW_VERSION=$MINGW_VERSION, ARCH=$ARCH" -O ${WORKDIR}/scopy-$MINGW_VERSION-build-deps-pacman.txt
@@ -14,7 +12,6 @@ wget "https://ci.appveyor.com/api/projects/$SCOPY_MINGW_BUILD_DEPS_FORK/scopy-mi
 cd /c
 tar xJf ${WORKDIR}/scopy-$MINGW_VERSION-build-deps.tar.xz
 
-cd /c
 SCOPY_MINGW_BUILD_DEPS_PACMAN=$(<${WORKDIR}/scopy-$MINGW_VERSION-build-deps-pacman.txt)
 PACMAN_SYNC_DEPS="
 	$SCOPY_MINGW_BUILD_DEPS_PACMAN\
