@@ -7,7 +7,7 @@ echo $PATH
 
 WORKDIR=${PWD}
 echo BUILD_NO $BUILD_NO
-JOBS=$(('nproc'+1))
+JOBS=$(nproc)
 
 CC=/${MINGW_VERSION}/bin/${ARCH}-w64-mingw32-gcc.exe
 CXX=/${MINGW_VERSION}/bin/${ARCH}-w64-mingw32-g++.exe
