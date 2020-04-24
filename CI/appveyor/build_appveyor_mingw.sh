@@ -86,7 +86,7 @@ cp /c/$BUILD_FOLDER/Scopy.exe /c/$DEST_FOLDER/
 cp /c/$BUILD_FOLDER/qt.conf /c/$DEST_FOLDER/
 
 /c/msys64/$MINGW_VERSION/bin/windeployqt.exe --dir /c/$DEST_FOLDER --release --no-system-d3d-compiler --no-compiler-runtime --no-quick-import --opengl --printsupport /c/$BUILD_FOLDER/Scopy.exe
-cp -r /mingw64/share/libsigrokdecode/decoders  /c/$DEST_FOLDER/
+cp -r /$MINGW_VERSION/share/libsigrokdecode/decoders  /c/$DEST_FOLDER/
 
 #tar -C /c/$DEST_FOLDER --strip-components=3 -xJf /c/scopy-$MINGW_VERSION-build-deps.tar.xz msys64/$MINGW_VERSION/bin
 cd /$MINGW_VERSION/bin ;
