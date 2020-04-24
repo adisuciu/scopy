@@ -7,7 +7,7 @@ echo $PATH
 
 WORKDIR=${PWD}
 echo BUILD_NO $BUILD_NO
-JOBS=-j3
+JOBS=$(('nproc'+1))
 
 CC=/${MINGW_VERSION}/bin/${ARCH}-w64-mingw32-gcc.exe
 CXX=/${MINGW_VERSION}/bin/${ARCH}-w64-mingw32-g++.exe
@@ -35,6 +35,12 @@ DEBUG_FOLDER=debug_$ARCH_BIT
 cd /c
 source ${WORKDIR}/CI/appveyor/install_msys_deps.sh
 
+# Download a 32-bit version of windres.exe
+cd ${WORKDIR} 
+wget http://swdownloads.analog.com/cse/build/windres.exe.gz
+gunzip windres.exe.gz
+
+
 echo "### Building Scopy ..."
 /$MINGW_VERSION/bin/python3.exe --version
 mkdir /c/$BUILD_FOLDER
@@ -44,7 +50,7 @@ cmake -G"Unix Makefiles" "$SCOPY_CMAKE_OPTS" $CMAKE_OPTS /c/projects/scopy
 cd /c/$BUILD_FOLDER/resources
 sed -i  's/^\(FILEVERSION .*\)$/\1,'$BUILD_NO'/' properties.rc
 cat properties.rc
-cd /c/build_$ARCH_BIT && make $JOBS
+cd /c/build_$ARCH_BIT && make -j $JOBS
 
 
 echo "### Deploy the application (copy the dependencies) ..."
