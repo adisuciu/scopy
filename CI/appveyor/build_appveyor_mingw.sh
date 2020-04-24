@@ -45,12 +45,12 @@ echo "### Building Scopy ..."
 /$MINGW_VERSION/bin/python3.exe --version
 mkdir /c/$BUILD_FOLDER
 cd /c/$BUILD_FOLDER
-cmake -G"Unix Makefiles" "$SCOPY_CMAKE_OPTS" $CMAKE_OPTS /c/projects/scopy
+cmake -G"Ninja" "$SCOPY_CMAKE_OPTS" $CMAKE_OPTS /c/projects/scopy
 
 cd /c/$BUILD_FOLDER/resources
 sed -i  's/^\(FILEVERSION .*\)$/\1,'$BUILD_NO'/' properties.rc
 cat properties.rc
-cd /c/build_$ARCH_BIT && make -j $JOBS
+cd /c/build_$ARCH_BIT && ninja -v -j $JOBS
 
 
 echo "### Deploy the application (copy the dependencies) ..."

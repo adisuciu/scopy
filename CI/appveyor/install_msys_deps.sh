@@ -15,6 +15,7 @@ SCOPY_MINGW_BUILD_DEPS_PACMAN=$(</tmp/scopy-$MINGW_VERSION-build-deps-pacman.txt
 PACMAN_SYNC_DEPS="
 	$SCOPY_MINGW_BUILD_DEPS_PACMAN\
 	mingw-w64-$ARCH-matio \
+	mingw-w64-$ARCH-ninja \
 "
 
 PACMAN_REPO_DEPS="
