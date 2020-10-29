@@ -15,7 +15,7 @@ LIBSIGROKDECODE_BRANCH=master #not used
 BOOST_VERSION_FILE=1_65_1
 BOOST_VERSION=1.65.1
 
-PYTHON="python3"
+PYTHON="python@3.8"
 PACKAGES=" qt pkg-config cmake fftw bison gettext autoconf automake libtool libzip glib libusb $PYTHON"
 PACKAGES="$PACKAGES glibmm doxygen wget gnu-sed libmatio dylibbundler libxml2"
 
