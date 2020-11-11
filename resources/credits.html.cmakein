@@ -1,0 +1,25 @@
+<p>Scopy includes or is linked to a number of open source libraries, released under their own licenses.</p>
+
+<p>Boost - <a href=https://www.boost.org/users/license.html>License</a> <a href=https://www.boost.org>Homepage</a><br>
+Qt - <a href=https://doc.qt.io/qt-5/opensourcelicense.html>License</a> <a href=https://www.qt.io>Homepage</a><br>
+Qwt - <a href=https://qwt.sourceforge.io/qwtlicense.html>License</a> <a href=https://qwt.sourceforge.io>Homepage</a><br>
+QwtPolar - <a href=https://qwtpolar.sourceforge.io/qwtlicense.html>License</a> <a href=https://qwtpolar.sourceforge.io>Homepage</a><br>
+GNURadio - <a href=https://github.com/gnuradio/gnuradio/blob/master/COPYING>License</a> <a href=https://www.gnuradio.org>Homepage</a><br>
+libsigrokdecode - <a href=https://github.com/sigrokproject/libsigrokdecode/blob/master/COPYING>License</a> <a href=https://sigrok.org>Homepage</a><br>
+PulseView - <a href=https://github.com/sigrokproject/pulseview>License</a> <a href=https://sigrok.org>Homepage</a><br>
+glib - <a href=https://github.com/GNOME/glib/blob/master/COPYING>License</a> <a href=https://github.com/GNOME/glib>Homepage</a><br>
+glibmm - <a href=https://github.com/GNOME/glibmm/blob/master/COPYING>License</a> <a href=https://github.com/GNOME/glibmm>Homepage</a><br>
+libsigc++ - <a href=https://github.com/libsigcplusplus/libsigcplusplus/blob/master/COPYING>License</a> <a href=https://libsigcplusplus.github.io/libsigcplusplus>Homepage</a><br>
+matio - <a href=https://github.com/telehan/libmatio/blob/master/COPYING>License</a> <a href=https://github.com/telehan/libmatio>Homepage</a><br>
+Python - <a href=https://docs.python.org/3/license.html>License</a> <a href=https://www.python.org>Homepage</a><br>
+flatpak - <a href=https://github.com/flatpak/flatpak/blob/master/COPYING>License</a> <a href=https://flatpak.org>Homepage</a> <br>
+InnoSetup - <a href=https://jrsoftware.org/files/is/license.txt>License</a> <a href=https://jrsoftware.org/isinfo.php>Homepage</a><br>
+InnoSetup - <a href=>License</a> <a href=>Homepage</a><br>
+
+Breakpad - <a href=https://github.com/google/breakpad/blob/master/LICENSE>License</a> <a href=https://github.com/google/breakpad>Homepage</a><br>
+doxygen - <a href=https://github.com/doxygen/doxygen/blob/master/LICENSE>License</a> <a href=https://www.doxygen.nl/index.html>Homepage</a><br>
+libiio - <a href=https://github.com/analogdevicesinc/libiio/blob/master/COPYING.txt>License</a> <a href=https://github.com/analogdevicesinc/libiio>Homepage</a><br>
+libm2k - <a href=https://github.com/analogdevicesinc/libm2k/blob/master/LICENSE>License</a> <a href=https://github.com/analogdevicesinc/libm2k>Homepage</a><br>
+gr-iio - <a href=https://github.com/analogdevicesinc/gr-iio/blob/master/COPYING>License</a> <a href=https://github.com/analogdevicesinc/gr-iio>Homepage</a><br>
+gr-m2k - <a href=https://github.com/analogdevicesinc/gr-m2k/blob/master/COPYING>License</a> <a href=https://github.com/analogdevicesinc/gr-m2k>Homepage</a></p><br>
+
