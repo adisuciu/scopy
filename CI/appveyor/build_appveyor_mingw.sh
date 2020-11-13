@@ -4,7 +4,7 @@ set -e
 
 export PATH=/bin:/usr/bin:/${MINGW_VERSION}/bin:/c/Program\ Files/Git/cmd:/c/Windows/System32:/c/Program\ Files/7-Zip:/c/Program\ Files\ \(x86\)/Inno\ Setup\ \6:/c/Program\ Files/Appveyor/BuildAgent
 echo $PATH
-
+appveyor AddMessage "Starting build_appveyor_mingw.sw"
 RC_COMPILER_OPT="-DCMAKE_RC_COMPILER=/c/msys64/${MINGW_VERSION}/bin/windres.exe"
 
 WORKDIR=${PWD}
@@ -36,8 +36,10 @@ DEST_FOLDER=scopy_$ARCH_BIT
 BUILD_FOLDER=build_$ARCH_BIT
 DEBUG_FOLDER=debug_$ARCH_BIT
 
+appveyor AddMessage "Installing msys deps.sw"
 cd /c
 source ${WORKDIR}/CI/appveyor/install_msys_deps.sh
+appveyor AddMessage "Installed msys deps.sw"
 
 # Download a 32-bit version of windres.exe
 cd ${WORKDIR}
@@ -46,22 +48,26 @@ gunzip windres.exe.gz
 
 
 echo "### Building Scopy ..."
+appveyor AddMessage "Running CMake"
 /$MINGW_VERSION/bin/python3.exe --version
 mkdir /c/$BUILD_FOLDER
 cd /c/$BUILD_FOLDER
 cmake -G 'Unix Makefiles' $SCOPY_CMAKE_OPTS $CMAKE_OPTS /c/projects/scopy
+appveyor AddMessage "Build configured"
 
 cat /c/$BUILD_FOLDER/buildinfo.html
 appveyor PushArtifact /c/$BUILD_FOLDER/buildinfo.html
-appveyor --help
 
+appveyor AddMessage "Starting build"
 cd /c/$BUILD_FOLDER/resources
 sed -i  's/^\(FILEVERSION .*\)$/\1,'$BUILD_NO'/' properties.rc
 cat properties.rc
 cd /c/build_$ARCH_BIT && make -j $JOBS
+appveyor AddMessage "Build finished"
 
 
 echo "### Deploy the application (copy the dependencies) ..."
+appveyor AddMessage "Deploying Scopy"
 mkdir /c/$DEST_FOLDER
 cp /c/$BUILD_FOLDER/Scopy.exe /c/$DEST_FOLDER/
 cp /c/$BUILD_FOLDER/qt.conf /c/$DEST_FOLDER/
@@ -86,10 +92,16 @@ mkdir /c/$DEBUG_FOLDER
 mv /c/$DEST_FOLDER/Scopy.exe.sym /c/$DEBUG_FOLDER
 mv /c/$DEST_FOLDER/.debug /c/$DEBUG_FOLDER
 
+appveyor AddMessage "Scopy succesfully deployed"
+
+mkdir /c/$DEST_FOLDER
 echo "### Creating archives ... "
+appveyor AddMessage "Creating archives"
 7z a "/c/scopy-${ARCH_BIT}bit.zip" /c/$DEST_FOLDER
-# appveyor PushArtifact /c/scopy-${ARCH_BIT}bit.zip
+appveyor PushArtifact /c/scopy-${ARCH_BIT}bit.zip
 7z a "/c/debug-${ARCH_BIT}bit.zip" /c/$DEBUG_FOLDER
-# appveyor PushArtifact /c/debug-${ARCH_BIT}bit.zip
+appveyor PushArtifact /c/debug-${ARCH_BIT}bit.zip
+appveyor AddMessage "Creating installer"
 iscc //Qp /c/$BUILD_FOLDER/scopy-$ARCH_BIT.iss
-# appveyor PushArtifact /c/$BUILD_FOLDER/scopy-$ARCH_BIT.iss
+appveyor PushArtifact $DEPLOY_FILE
+appveyor AddMessage "Job complete"
