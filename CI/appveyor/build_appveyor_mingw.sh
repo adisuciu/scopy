@@ -51,6 +51,10 @@ mkdir /c/$BUILD_FOLDER
 cd /c/$BUILD_FOLDER
 cmake -G 'Unix Makefiles' $SCOPY_CMAKE_OPTS $CMAKE_OPTS /c/projects/scopy
 
+cat /c/$BUILD_FOLDER/buildinfo.html
+appveyor PushArtifact /c/$BUILD_FOLDER/buildinfo.html
+appveyor --help
+
 cd /c/$BUILD_FOLDER/resources
 sed -i  's/^\(FILEVERSION .*\)$/\1,'$BUILD_NO'/' properties.rc
 cat properties.rc
