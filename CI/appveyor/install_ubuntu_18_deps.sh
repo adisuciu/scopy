@@ -12,6 +12,7 @@ QWT_BRANCH=qwt-6.1-multiaxes
 QWTPOLAR_BRANCH=master # not used
 LIBSIGROK_BRANCH=master
 LIBSIGROKDECODE_BRANCH=master #not used
+CMAKE_OPTS=${CMAKE_OPTS} -DWITH_DOC=OFF
 
 set -e
 if [ $# -eq 0 ]; then
