@@ -407,26 +407,22 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 
 set(CMAKE_INSTALL_DOCDIR "${CMAKE_CURRENT_BINARY_DIR}/doc")
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-	option(WITH_DOC "Generate documentation with Doxygen" OFF)
-	if (WITH_DOC)
-		configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile_API.in ${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile @ONLY)
-		set(HTML_DEST_DIR ${CMAKE_CURRENT_BINARY_DIR})
-		#file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/doc DESTINATION ${HTML_DEST_DIR})
+option(WITH_DOC "Generate documentation with Doxygen" OFF)
+if (WITH_DOC)
+	find_package(Doxygen)
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile_API.in ${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile @ONLY)
+	set(HTML_DEST_DIR ${CMAKE_CURRENT_BINARY_DIR})
+	#file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/doc DESTINATION ${HTML_DEST_DIR})
 
-		add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-			COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile
-			WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-			COMMENT "Generating API documentation with Doxygen" VERBATIM
-			)
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+		COMMENT "Generating API documentation with Doxygen" VERBATIM
+		)
 
-		if(NOT SKIP_INSTALL_ALL)
-			install(DIRECTORY ${HTML_DEST_DIR} DESTINATION ${CMAKE_INSTALL_DOCDIR})
-		endif()
+	if(NOT SKIP_INSTALL_ALL)
+		install(DIRECTORY ${HTML_DEST_DIR} DESTINATION ${CMAKE_INSTALL_DOCDIR})
 	endif()
-else()
-	message(STATUS "Doxygen not found, API documentation won't be generated")
 endif()
 
 
