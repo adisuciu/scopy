@@ -10,14 +10,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Pull the Docker Image
-      run: docker pull alexandratr/scopy-flatpak-bionic:clean
+      run: docker pull adisuciu/scopy-flatpak-arm-focal:clean
     - name: Run Docker Image
       run: |
             docker run --privileged \
                 -v `pwd`:$GITHUB_WORKSPACE:rw \
                 -e "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" \
-                alexandratr/scopy-flatpak-bionic:clean /bin/bash -xe $GITHUB_WORKSPACE/CI/appveyor/inside_flatpak_docker.sh
+                adisuciu/scopy-flatpak-arm-focal:clean /bin/bash -xe $GITHUB_WORKSPACE/CI/appveyor/inside_flatpak_docker.sh
     - uses: actions/upload-artifact@v2
       with:
-        name: Scopy.flatpak
+        name: Scopy-arm.flatpak
         path: ${{ github.workspace }}/Scopy.flatpak

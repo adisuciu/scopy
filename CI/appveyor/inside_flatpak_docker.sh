@@ -38,7 +38,7 @@ cp tmp.json org.adi.Scopy.json
 rm tmp.json
 
 make clean
-make -j4
+make -j4 ARCH=arm
 
 # Copy the Scopy.flatpak file in $GITHUB_WORKSPACE (which is the external location, mount when docker starts)
 cp Scopy.flatpak $ARTIFACT_LOCATION/

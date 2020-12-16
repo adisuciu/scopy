@@ -1,24 +1,26 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
+ENV TZ=Europe/Bucharest
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update -y
 
 # Install base dependencies
-RUN apt-get install -y software-properties-common build-essential git sudo apt-utils
+RUN apt-get install -y software-properties-common build-essential git sudo apt-utils qemu-system-arm qemu-user-static
 
 # Install flatpak
-RUN add-apt-repository ppa:alexlarsson/flatpak -y
-RUN apt-get update -y
+RUN echo 1
 RUN apt install flatpak flatpak-builder -y
 
 # Install remote
 RUN flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-RUN flatpak install flathub org.kde.Platform//5.12 -y
-RUN flatpak install flathub org.kde.Sdk//5.12 -y
+RUN flatpak install flathub org.kde.Platform/arm/5.14 -y
+RUN flatpak install flathub org.kde.Sdk/arm/5.14 -y
 
 # Clean
 RUN apt-get clean -y && apt-get autoclean -y
 
-ARG REPO_LINK=https://github.com/analogdevicesinc/scopy-flatpak
+RUN echo 2
+ARG REPO_LINK=https://github.com/adisuciu/scopy-flatpak
 ARG REPO_LOCAL=/home/docker/scopy-flatpak
 ARG REPO_BRANCH=master
 
