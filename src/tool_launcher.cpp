@@ -55,7 +55,9 @@
 #include <QJsonDocument>
 #include <QDesktopServices>
 #include <QSpacerItem>
-#include <QtAndroidExtras/QtAndroid>
+#if __ANDROID__
+	#include <QtAndroidExtras/QtAndroid>
+#endif
 
 #include <iio.h>
 
@@ -91,7 +93,7 @@ ToolLauncher::ToolLauncher(QString prevCrashDump, QWidget *parent) :
 	notifier(STDIN_FILENO, QSocketNotifier::Read),
 	infoWidget(nullptr),
 	calib(nullptr),
-	skip_calibration(false),
+	skip_calibration(true),
 	calibrating(false),
 	debugger_enabled(false),
 	indexFile(""), deviceInfo(""), pathToFile(""),
@@ -284,12 +286,15 @@ ToolLauncher::ToolLauncher(QString prevCrashDump, QWidget *parent) :
 	} else {
 
 	}
+#if __ANDROID__
 	auto  result = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
 	    if(result == QtAndroid::PermissionResult::Denied){
 		QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
 		if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
 		    return;
 	    }
+#endif
+	    skip_calibration=true;
 
 }
 
@@ -1423,6 +1428,15 @@ QPair<bool, bool> adiscope::ToolLauncher::initialCalibration()
 		initialCalibrationFlag = false;
 	}
 
+	if (okc.first) {
+		Q_EMIT adcCalibrationDone();
+		Q_EMIT dacCalibrationDone();
+		Q_EMIT calibrationDone();
+	}
+	else {
+		Q_EMIT calibrationFailed();
+	}
+
 	return okc;
 }
 
@@ -1454,15 +1468,6 @@ QPair<bool, bool> adiscope::ToolLauncher::calibrate()
 	}
 
 	calibrating = false;
-
-	if (ok) {
-		Q_EMIT adcCalibrationDone();
-		Q_EMIT dacCalibrationDone();
-		Q_EMIT calibrationDone();
-	}
-	else {
-		Q_EMIT calibrationFailed();
-	}
 
 	return { ok, skipCalib };
 }

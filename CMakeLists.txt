@@ -83,7 +83,9 @@ endif (MSVC)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5 COMPONENTS LinguistTools REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
-find_package(Qt5AndroidExtras REQUIRED)
+if(ANDROID)
+	find_package(Qt5AndroidExtras REQUIRED)
+endif()
 
 FILE(GLOB TS_FILES ${CMAKE_SOURCE_DIR}/resources/translations/*.ts)
 set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION ${CMAKE_CURRENT_BINARY_DIR})
@@ -156,7 +158,7 @@ find_package(Qt5Xml REQUIRED)
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
 find_package(Gnuradio "3.8" REQUIRED COMPONENTS runtime analog blocks fft filter volk pmt )
 
-#set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH};/usr/local/lib/cmake)
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH};/usr/local/lib/cmake)
 find_package(gnuradio-iio REQUIRED PATH_SUFFIXES iio)
 find_package(gnuradio-scopy REQUIRED PATH_SUFFIXES scopy)
 find_package(gnuradio-m2k REQUIRED PATH_SUFFIXES m2k)
@@ -172,10 +174,19 @@ if (ENABLE_MATIO)
 	add_definitions(-DMATLAB_SUPPORT_SIGGEN)
 endif()
 
-set(CMAKE_FIND_DEBUG_MODE ON)
-find_library(QWT_LIBRARIES REQUIRED NAMES qwt_${ANDROID_ABI})
-message(1234 ${QWT_LIBRARIES})
-set(CMAKE_FIND_DEBUG_MODE OFF)
+if(ANDROID)
+	set(CMAKE_FIND_DEBUG_MODE ON)
+	find_library(QWT_LIBRARIES REQUIRED NAMES qwt_${ANDROID_ABI})
+	message(1234 ${QWT_LIBRARIES})
+	set(CMAKE_FIND_DEBUG_MODE OFF)
+else()
+	find_library(QWT_LIBRARIES REQUIRED NAMES qwt)
+	find_library(QWTPOLAR_LIBRARIES qwtpolar)
+	find_path(QWTPOLAR_INCLUDE_DIRS qwt_polar_plot.h PATH_SUFFIXES qwt)
+	if (NOT QWTPOLAR_LIBRARIES OR NOT QWTPOLAR_INCLUDE_DIRS)
+		message(SEND_ERROR "QwtPolar not found")
+	endif()
+endif()
 
 find_package(PkgConfig)
 set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
@@ -379,6 +390,7 @@ target_link_libraries(${PROJECT_NAME} LINK_PRIVATE
 		gnuradio::gnuradio-m2k
 		${Boost_LIBRARIES}
 		${QWT_LIBRARIES}
+		${QWTPOLAR_LIBRARIES}
 		${Qt5Svg_LIBRARIES}
 		${Qt5Xml_LIBRARIES}
 		${MATIO_LIBRARIES}

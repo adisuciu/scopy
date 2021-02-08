@@ -26,6 +26,7 @@
 
 #include <gnuradio/blocks/null_sink.h>
 #include <gnuradio/blocks/short_to_float.h>
+#include <gnuradio/blocks/throttle.h>
 
 #include <iio.h>
 using namespace adiscope;
@@ -74,6 +75,8 @@ iio_manager::iio_manager(unsigned int block_id,
 	/* Avoid unconnected channel errors by connecting a dummy sink */
 	auto dummy_copy = blocks::copy::make(sizeof(short));
 	auto dummy = blocks::null_sink::make(sizeof(short));
+	auto th0 = blocks::throttle::make(sizeof(short),320000);
+	auto th1 = blocks::throttle::make(sizeof(short),320000);
 
 
 	//TODO - make dynamic
@@ -81,9 +84,15 @@ iio_manager::iio_manager(unsigned int block_id,
 	freq_comp_filt[0][1] = adiscope::frequency_compensation_filter::make(false);
 	freq_comp_filt[1][0] = adiscope::frequency_compensation_filter::make(false);
 	freq_comp_filt[1][1] = adiscope::frequency_compensation_filter::make(false);
+	hier_block2::connect(iio_block,0,th0,0);
+	hier_block2::connect(iio_block,1,th1,0);
+
+	hier_block2::connect(th0,0,freq_comp_filt[0][0],0);
+	hier_block2::connect(th1,0,freq_comp_filt[1][0],0);
 
 	for (unsigned i = 0; i < nb_channels; i++) {
-		hier_block2::connect(iio_block,i,freq_comp_filt[i][0],0);
+
+
 		hier_block2::connect(freq_comp_filt[i][0],0,freq_comp_filt[i][1],0);
 
 		hier_block2::connect(freq_comp_filt[i][1], 0, dummy_copy, i);
