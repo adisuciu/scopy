@@ -293,6 +293,12 @@ ToolLauncher::ToolLauncher(QString prevCrashDump, QWidget *parent) :
 		if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
 		    return;
 	    }
+	result = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
+		if(result == QtAndroid::PermissionResult::Denied){
+		    QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
+		    if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+			return;
+		}
 #endif
 	    skip_calibration=true;
 
@@ -1603,10 +1609,10 @@ bool adiscope::ToolLauncher::switchContext(const QString& uri)
 	calib->initialize();
 
 	try {
-//		if (filter->compatible(TOOL_PATTERN_GENERATOR)
-//				|| filter->compatible(TOOL_DIGITALIO)) {
-//			dioManager = new DIOManager(ctx, filter);
-//		}
+		if (filter->compatible(TOOL_PATTERN_GENERATOR)
+				|| filter->compatible(TOOL_DIGITALIO)) {
+			dioManager = new DIOManager(ctx, filter);
+		}
 
 //		if (filter->compatible(TOOL_LOGIC_ANALYZER)
 //				|| filter->compatible(TOOL_PATTERN_GENERATOR)) {
@@ -1618,8 +1624,7 @@ bool adiscope::ToolLauncher::switchContext(const QString& uri)
 //				info.setText(tr("Digital decoders support is disabled. Some features may be missing"));
 //				info.exec();
 //			} else {
-//				bool success = loadDecoders(QCoreApplication::applicationDirPath() +
-//							    "/decoders");
+//				bool success = loadDecoders("decoders");
 
 //				if (!success) {
 //					search_timer->stop();
@@ -1631,43 +1636,43 @@ bool adiscope::ToolLauncher::switchContext(const QString& uri)
 //			}
 //		}
 
-//		if (filter->compatible(TOOL_DIGITALIO)) {
-//			dio = new DigitalIO(nullptr, filter, menu->getToolMenuItemFor(TOOL_DIGITALIO),
-//					    dioManager, &js_engine, this);
-//			toolList.push_back(dio);
-//			connect(dio, &DigitalIO::showTool, [=]() {
-//				menu->getToolMenuItemFor(TOOL_DIGITALIO)->getToolBtn()->click();
-//			});
-//		}
+		if (filter->compatible(TOOL_DIGITALIO)) {
+			dio = new DigitalIO(nullptr, filter, menu->getToolMenuItemFor(TOOL_DIGITALIO),
+					    dioManager, &js_engine, this);
+			toolList.push_back(dio);
+			connect(dio, &DigitalIO::showTool, [=]() {
+				menu->getToolMenuItemFor(TOOL_DIGITALIO)->getToolBtn()->click();
+			});
+		}
 
 
-//		if (filter->compatible(TOOL_POWER_CONTROLLER)) {
-//			power_control = new PowerController(ctx, menu->getToolMenuItemFor(TOOL_POWER_CONTROLLER),
-//							    &js_engine, this);
-//			toolList.push_back(power_control);
-//			connect(power_control, &PowerController::showTool, [=]() {
-//				menu->getToolMenuItemFor(TOOL_POWER_CONTROLLER)->getToolBtn()->click();
-//			});
-//		}
+		if (filter->compatible(TOOL_POWER_CONTROLLER)) {
+			power_control = new PowerController(ctx, menu->getToolMenuItemFor(TOOL_POWER_CONTROLLER),
+							    &js_engine, this);
+			toolList.push_back(power_control);
+			connect(power_control, &PowerController::showTool, [=]() {
+				menu->getToolMenuItemFor(TOOL_POWER_CONTROLLER)->getToolBtn()->click();
+			});
+		}
 
-//		if (filter->compatible(TOOL_LOGIC_ANALYZER)) {
-//			logic_analyzer = new logic::LogicAnalyzer(ctx, filter, menu->getToolMenuItemFor(TOOL_LOGIC_ANALYZER),
-//								  &js_engine, this);
-//			toolList.push_back(logic_analyzer);
-//			connect(logic_analyzer, &logic::LogicAnalyzer::showTool, [=]() {
-//				menu->getToolMenuItemFor(TOOL_LOGIC_ANALYZER)->getToolBtn()->click();
-//			});
-//		}
+		if (filter->compatible(TOOL_LOGIC_ANALYZER)) {
+			logic_analyzer = new logic::LogicAnalyzer(ctx, filter, menu->getToolMenuItemFor(TOOL_LOGIC_ANALYZER),
+								  &js_engine, this);
+			toolList.push_back(logic_analyzer);
+			connect(logic_analyzer, &logic::LogicAnalyzer::showTool, [=]() {
+				menu->getToolMenuItemFor(TOOL_LOGIC_ANALYZER)->getToolBtn()->click();
+			});
+		}
 
 
-//		if (filter->compatible((TOOL_PATTERN_GENERATOR))) {
-//			pattern_generator = new logic::PatternGenerator(ctx, filter,
-//									menu->getToolMenuItemFor(TOOL_PATTERN_GENERATOR), &js_engine, dioManager, this);
-//			toolList.push_back(pattern_generator);
-//			connect(pattern_generator, &logic::PatternGenerator::showTool, [=]() {
-//				menu->getToolMenuItemFor(TOOL_PATTERN_GENERATOR)->getToolBtn()->click();
-//			});
-//		}
+		if (filter->compatible((TOOL_PATTERN_GENERATOR))) {
+			pattern_generator = new logic::PatternGenerator(ctx, filter,
+									menu->getToolMenuItemFor(TOOL_PATTERN_GENERATOR), &js_engine, dioManager, this);
+			toolList.push_back(pattern_generator);
+			connect(pattern_generator, &logic::PatternGenerator::showTool, [=]() {
+				menu->getToolMenuItemFor(TOOL_PATTERN_GENERATOR)->getToolBtn()->click();
+			});
+		}
 	}
 	catch (libm2k::m2k_exception &e) {
 		return false;
